@@ -1,0 +1,10 @@
+*, *::before, *::after {
+    box-sizing: border-box !important;
+}
+
+html, body, #root {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    margin: 0;
+    padding: 0;
+}
