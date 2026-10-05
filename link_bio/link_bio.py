@@ -1,9 +1,10 @@
 import reflex as rx
+import link_bio.constants as const
 from link_bio.components.navbar import navbar
-from link_bio.views.header.header import header
-from link_bio.views.links.links import links
+from link_bio.views.header import header
+from link_bio.views.links import links
 from link_bio.components.footer import footer
-from link_bio.views.sponsors.sponsors import sponsors
+from link_bio.views.sponsors import sponsors
 import link_bio.styles.styles as styles
 from link_bio.styles.styles import Size as Size
 
@@ -35,7 +36,23 @@ def index() -> rx.Component:
 
 app = rx.App(
     style=styles.BASE_STYLE,
-    stylesheets=styles.STYLESHEETS
+    stylesheets=styles.STYLESHEETS,
+    head_components=[
+            # 1. Cargamos el script oficial de Google Analytics de forma asíncrona con tu ID correcto
+            rx.script(
+                src=f"https://www.googletagmanager.com/gtag/js?id={const.G_TAG}",
+                async_=True,
+            ),
+            # 2. Inicializamos el dataLayer y gtag en un segundo script ordenado
+            rx.script(
+                """
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-PMDZDF543W');
+                """
+            ),
+        ],
 )
 app.add_page(
     index,
@@ -76,3 +93,23 @@ app.add_page(
 
 # Crear fichero build.sh
 # sh build.sh
+
+# & "C:\Program Files\Git\usr\bin\sh.exe" build.sh
+
+# git init
+# git status
+# git add .
+
+# git commit -m "Primer commit"
+
+# git remote add origin https://github.com/eduwolfnav/link_bio.git
+# git remote -v
+# git push -u origin master # Subir cambios a GitHub
+
+
+#### CURSO WEB AVANZADO
+
+# python3 -m venv .venv #Crea entorno virtual oculto
+# .\.venv\Scripts\Activate.ps1 # Activar
+
+# pip install -r ./requirements.txt

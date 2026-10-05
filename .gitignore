@@ -4,3 +4,4 @@ assets/external/
 __pycache__/
 .web
 .states
+.venv/
