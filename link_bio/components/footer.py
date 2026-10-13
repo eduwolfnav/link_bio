@@ -11,19 +11,32 @@ def footer() -> rx.Component:
             width="77px",
             height="77px",
             alt="Logotipo de EduWolf. Un cabeza de lobo arriba de frente, con Edu Wolf escrito abajo."
-            ),
+        ),
         rx.link(
             f"HomePage @{datetime.date.today().year} https://eduwolf.nav",
             href="https://eduwolf.nav",
             is_external=True,
             font_size=Size.MEDIUM.value,
-            text_align="center",  # Centra el texto dentro del enlace
+            text_align="center",
             width="100%"
         ),
-        rx.text(
-            "By Edu Wolf 🐺",
-            font_size=Size.MEDIUM.value,
-            margin_top=Size.ZERO.value
+        rx.hstack(
+            rx.link(
+                rx.image(
+                    src="icons/icon_github.svg",
+                    width=Size.LARGE.value,
+                    height=Size.LARGE.value
+                ),
+                href="https://github.com/eduwolfnav/link_bio",
+                is_external=True
+            ),
+            rx.text(
+                "By Edu Wolf 🐺",
+                font_size=Size.MEDIUM.value,
+                white_space="nowrap"  # <-- Evita que el texto salte de línea
+            ),
+            align="center",
+            spacing="3",  # Espacio entre el icono y el texto
         ),
         width="100%",
         justify="center",
@@ -32,5 +45,6 @@ def footer() -> rx.Component:
         padding_x="16px",
         padding_y="8px",
         margin_bottom=Size.BIG.value,
-        color=TextColor.FOOTER.value
+        color=TextColor.FOOTER.value,
+        spacing="0"
     )

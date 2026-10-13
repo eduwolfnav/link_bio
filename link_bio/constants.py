@@ -1,5 +1,5 @@
 # Comunes
-G_TAG = "G-PMDZDF543W"
+G_TAG = "G-PMDZDF543W" # Google analytics
 
 # Cabecera
 GITHUB_URL = "https://github.com/mouredev"

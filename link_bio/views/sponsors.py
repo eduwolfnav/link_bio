@@ -14,11 +14,14 @@ def sponsors() -> rx.Component:
                 "mongodb.png",
                 url="https://www.mongodb.com/es"
             ),
-            spacing="4",
-            wrap="wrap", # Permite que bajen si la pantalla es muy estrecha
-            width="100%",
-            justify_content="start" # Alinea todo el contenido a la izquierda
+            link_sponsor(
+                "Reflex.jpg",
+                url="https://reflex.dev/"
+            ),
+            spacing="3",
+            align="center"
         ),
         width="100%",
-        align_items="start" # Alinea el título y el bloque a la izquierda
+        align_items="start",
+        spacing="3"
     )

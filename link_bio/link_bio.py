@@ -1,38 +1,14 @@
 import reflex as rx
-import link_bio.constants as const
-from link_bio.components.navbar import navbar
-from link_bio.views.header import header
-from link_bio.views.links import links
-from link_bio.components.footer import footer
-from link_bio.views.sponsors import sponsors
 import link_bio.styles.styles as styles
-from link_bio.styles.styles import Size as Size
+import link_bio.constants as const
 
-class State(rx.State):
-    pass
+from link_bio.pages.index import index
+from link_bio.pages.courses import courses
 
-def index() -> rx.Component:
-    # return rx.text("Hola Reflex!", color="blue")
 
-    return rx.box(
-        navbar(),
-        rx.center(
-            rx.vstack(
-                header(),
-                links(),
-                sponsors(),
-                width="100%",
-                max_width=styles.MAX_WIDTH,
-                align_items="start",       # Permite que el header y links aprovechen todo el ancho sin deformarse
-                margin_y=Size.BIG.value,
-                padding_x=Size.DEFAULT.value,    # Padding lateral para evitar que toque los bordes en móviles
-                spacing="3"
-            ),
-            width="100%",
-        ),
-        footer()
-    )
-        
+# class State(rx.State):
+#    pass
+       
 
 app = rx.App(
     style=styles.BASE_STYLE,
@@ -54,12 +30,7 @@ app = rx.App(
             ),
         ],
 )
-app.add_page(
-    index,
-    title="eduwolf.nav",
-    description="Hola, mi nombre es Edu. Soy ingeniero en ejecución en informática, y me gusta escribir.",
-    image="avatar.png"
-)
+
 # app.compile()
 
 # reflex run

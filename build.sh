@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source venv/Scripts/activate
+source .venv/Scripts/activate
 
 pip install --upgrade pip
 pip install -r requirements.txt
@@ -13,3 +13,8 @@ reflex export --frontend-only
 python -c "import zipfile; zipfile.ZipFile('frontend.zip').extractall('public')"
 
 deactivate
+
+# Ejecutar bash build.sh
+# & "C:\Program Files\Git\bin\bash.exe" build.sh
+
+# PD: Antes de ejecutar, correc bash con .venv deactivate
