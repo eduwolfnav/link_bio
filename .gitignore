@@ -5,3 +5,4 @@ __pycache__/
 .web
 .states
 .venv/
+AGENTS.md
