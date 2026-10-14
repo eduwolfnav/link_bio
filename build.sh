@@ -18,3 +18,8 @@ deactivate
 # & "C:\Program Files\Git\bin\bash.exe" build.sh
 
 # PD: Antes de ejecutar, correc bash con .venv deactivate
+
+# git add .
+# git commit -m "Actualización del proyecto / 3°"
+# git push origin master
+# git push

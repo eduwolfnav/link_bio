@@ -6,7 +6,7 @@ from link_bio.pages.index import index
 from link_bio.pages.courses import courses
 
 
-# class State(rx.State):
+#class State(rx.State):
 #    pass
        
 
