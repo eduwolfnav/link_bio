@@ -6,9 +6,8 @@ from link_bio.pages.index import index
 from link_bio.pages.courses import courses
 
 
-#class State(rx.State):
-#    pass
-       
+class State(rx.State):
+    pass 
 
 app = rx.App(
     style=styles.BASE_STYLE,
@@ -84,3 +83,20 @@ app = rx.App(
 # .\.venv\Scripts\Activate.ps1 # Activar
 
 # pip install -r ./requirements.txt
+
+
+
+### Docker
+
+# preparar, .dockerignore y Dockerfile en la raiz
+
+# En consola CMD.
+# docker build -t eduwolfnav-web:lasted ./
+# docker run -d -p 3000:3000 -p 8000:8000 --name app eduwolfnav-web:lasted # Para exponer todo.
+# docker run -d -p 8000:8000 --name app eduwolfnav-web:lasted # Solo Backend
+
+# IA
+# docker rm -f app
+# docker build -t eduwolfnav-web:lasted .
+# docker run -d -p 8000:8000 --name app eduwolfnav-web:lasted
+# docker logs app
