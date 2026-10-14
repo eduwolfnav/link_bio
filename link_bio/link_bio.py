@@ -64,7 +64,7 @@ app = rx.App(
 # Crear fichero build.sh
 # sh build.sh
 
-# & "C:\Program Files\Git\usr\bin\sh.exe" build.sh
+# & "C:\Program Files\Git\usr\bin\sh.exe" local_build.sh
 
 # git init
 # git status

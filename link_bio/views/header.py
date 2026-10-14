@@ -72,7 +72,7 @@ def header(details = True) -> rx.Component:
                     """
                     Este es un proyecto de aprendizaje, espero crecer
                     mucho en estas nuevas metodologías, inspirándome a crear
-                    arte, el arte de crear, test.
+                    arte, el arte de crear, docker.
                     """,
                     color=TextColor.BODY.value,
                     font_size=Size.MEDIUM.value,
