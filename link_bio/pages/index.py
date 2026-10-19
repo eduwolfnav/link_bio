@@ -8,12 +8,14 @@ from link_bio.components.footer import footer
 from link_bio.views.sponsors import sponsors
 import link_bio.styles.styles as styles
 from link_bio.styles.styles import Size as Size
+from link_bio.api.api import hello
+import asyncio
 
 @rx.page(
         title=utils.index_title,
         description=utils.index_description,
         image=utils.preview,
-        meta=utils.index_meta        
+        meta=utils.index_meta       
 )
 def index() -> rx.Component:
     # return rx.text("Hola Reflex!", color="blue")

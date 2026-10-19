@@ -2,33 +2,42 @@ import reflex as rx
 import link_bio.styles.styles as styles
 import link_bio.constants as const
 
+from fastapi import FastAPI
 from link_bio.pages.index import index
 from link_bio.pages.courses import courses
+from link_bio.pages.testasyncio import testasyncio
+from link_bio.api.api import hello
 
 
-class State(rx.State):
-    pass 
 
+# 1. Creamos la app de FastAPI para las APIs personalizadas
+# fastapi_app = FastAPI()
+
+# 2. Agregamos la ruta usando FastAPI directamente
+# fastapi_app.add_api_route("/hello", hello)
+# fastapi_app.add_api_route("/hola", hello)
+
+# 3. Inicializamos Reflex inyectando la app de FastAPI
 app = rx.App(
     style=styles.BASE_STYLE,
     stylesheets=styles.STYLESHEETS,
     head_components=[
-            # 1. Cargamos el script oficial de Google Analytics de forma asíncrona con tu ID correcto
-            rx.script(
-                src=f"https://www.googletagmanager.com/gtag/js?id={const.G_TAG}",
-                async_=True,
-            ),
-            # 2. Inicializamos el dataLayer y gtag en un segundo script ordenado
-            rx.script(
-                """
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', 'G-PMDZDF543W');
-                """
-            ),
-        ],
+        rx.script(
+            src=f"https://www.googletagmanager.com/gtag/js?id={const.G_TAG}",
+            async_=True,
+        ),
+        rx.script(
+            """
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PMDZDF543W');
+            """
+        ),
+    ],
+    # api_transformer=fastapi_app, # <-- Aquí conectamos las rutas de API
 )
+
 
 # app.compile()
 

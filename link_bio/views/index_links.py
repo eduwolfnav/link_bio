@@ -6,6 +6,14 @@ from link_bio.routes import Route
 
 def index_links() -> rx.Component:
     return rx.vstack(
+        title("Ejemplo Asyncio"),
+                link_button(
+                            "@ Ejemplo Asyncio",
+                            "Ejemplo Asyncio @eduwolf.nav.",
+                            "icons/async.svg",
+                            Route.TESTASYNCIO.value,
+                            is_external=False
+                ),
         title("Cursos recomendados"),
         link_button(
                     "@ Cursos recomendados",
