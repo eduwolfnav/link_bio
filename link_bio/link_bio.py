@@ -110,3 +110,5 @@ app = rx.App(
 # docker build -t eduwolfnav-web:lasted .
 # docker run -d -p 8000:8000 --name app eduwolfnav-web:lasted
 # docker logs app
+
+# TEST
