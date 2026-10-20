@@ -1,5 +1,4 @@
 import reflex as rx
-import datetime
 
 from link_bio.components.link_icon import link_icon
 from link_bio.components.info_text import info_text
@@ -7,17 +6,34 @@ from link_bio.styles.styles import Size as Size
 from link_bio.styles.colors import Color as Color
 from link_bio.styles.colors import TextColor as TextColor
 
-def header(details = True) -> rx.Component:
+def header(details = True, live=False) -> rx.Component:
     return rx.vstack(
         rx.hstack(
-            rx.avatar(
-                name="Edu Wolf", 
-                fallback="EW", 
-                size="8",
-                src="avatar.png",
-                padding="0px",
-                border="4px solid",
-                border_color=Color.CONTENT.value,
+            rx.box(
+                rx.avatar(
+                    name="Edu Wolf",
+                    fallback="EW",
+                    size="8",
+                    src="avatar.png",
+                    padding="0px",
+                    border="4px solid",
+                    border_color=Color.CONTENT.value,
+                ),
+                rx.cond(
+                    live,
+                    rx.box(
+                        position="absolute",
+                        bottom="-4px",
+                        right="-4px",
+                        width="22px",
+                        height="22px",
+                        border_radius="50%",
+                        background_color=Color.PURPLE.value,
+                        border=Color.BORDER.value,
+                    ),
+                ),
+                position="relative",
+                flex_shrink="0",
             ),
             rx.vstack(
                 rx.heading(
@@ -43,7 +59,7 @@ def header(details = True) -> rx.Component:
                         "https://github.com/eduwolfnav"
                     ),
                     spacing="3"
-                ),    
+                ),
                 align_items="start",
                 spacing="1",
                 width="100%"

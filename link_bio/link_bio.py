@@ -6,16 +6,17 @@ from fastapi import FastAPI
 from link_bio.pages.index import index
 from link_bio.pages.courses import courses
 from link_bio.pages.testasyncio import testasyncio
-from link_bio.api.api import hello
-
+from link_bio.api.api import hello, live
 
 
 # 1. Creamos la app de FastAPI para las APIs personalizadas
-# fastapi_app = FastAPI()
+fastapi_app = FastAPI()
 
 # 2. Agregamos la ruta usando FastAPI directamente
 # fastapi_app.add_api_route("/hello", hello)
 # fastapi_app.add_api_route("/hola", hello)
+
+fastapi_app.add_api_route("/live/{user}", live)
 
 # 3. Inicializamos Reflex inyectando la app de FastAPI
 app = rx.App(
@@ -35,7 +36,7 @@ app = rx.App(
             """
         ),
     ],
-    # api_transformer=fastapi_app, # <-- Aquí conectamos las rutas de API
+    api_transformer=fastapi_app # <-- Aquí conectamos las rutas de API
 )
 
 

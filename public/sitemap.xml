@@ -6,4 +6,7 @@
   <url>
     <loc>http://localhost:3000/cursos</loc>
   </url>
+  <url>
+    <loc>http://localhost:3000/testasyncio</loc>
+  </url>
 </urlset>

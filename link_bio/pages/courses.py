@@ -10,13 +10,15 @@ from link_bio.components.footer import footer
 from link_bio.views.sponsors import sponsors
 from link_bio.styles.styles import Size as Size
 from link_bio.routes import Route
+from link_bio.state.PageState import PageState
 
 @rx.page(
         route=Route.COURSES.value,
         title=utils.cursos_title,
         description=utils.cursos_description,
         image=utils.preview,
-        meta=utils.cursos_meta        
+        meta=utils.cursos_meta,
+        on_load=PageState.check_live        
 )
 def courses() -> rx.Component:
     # return rx.text("Hola Reflex!", color="blue")
@@ -26,7 +28,10 @@ def courses() -> rx.Component:
         navbar(),
         rx.center(
             rx.vstack(
-                header(details=False),
+                header(
+                    False,
+                    PageState.is_live
+                ),
                 courses_links(),
                 sponsors(),
                 width="100%",

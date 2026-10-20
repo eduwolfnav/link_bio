@@ -11,6 +11,7 @@ from link_bio.views.sponsors import sponsors
 from link_bio.styles.styles import Size as Size
 from link_bio.routes import Route
 from link_bio.api.api import hello
+from link_bio.state.PageState import PageState
 import asyncio
 
 class IndexState(rx.State):
@@ -34,8 +35,8 @@ class IndexState(rx.State):
         title=utils.cursos_title,
         description=utils.cursos_description,
         image=utils.preview,
-        on_load=IndexState.load_hello ,
-        meta=utils.cursos_meta        
+        on_load=[IndexState.load_hello, PageState.check_live],
+        meta=utils.cursos_meta       
 )
 def testasyncio() -> rx.Component:
     return rx.box(
@@ -43,7 +44,10 @@ def testasyncio() -> rx.Component:
         navbar(),
         rx.center(
             rx.vstack(
-                header(details=False),
+                header(
+                    False,
+                    PageState.is_live
+                ),
                 
                 # Contenedor para lo amarillo con espacio extra arriba y abajo
                 rx.vstack(

@@ -5,6 +5,8 @@ class Color(Enum):
     SECONDARY = "#0d2849"
     BACKGROUND = "#0c0c0c"
     CONTENT = "#1a5195"
+    PURPLE = "#9146ff"
+    BORDER = "4px solid #1a5195"
 
 class TextColor(Enum):
     HEADER = "#3b9eff"

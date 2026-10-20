@@ -8,14 +8,15 @@ from link_bio.components.footer import footer
 from link_bio.views.sponsors import sponsors
 import link_bio.styles.styles as styles
 from link_bio.styles.styles import Size as Size
-from link_bio.api.api import hello
+from link_bio.state.PageState import PageState
 import asyncio
 
 @rx.page(
         title=utils.index_title,
         description=utils.index_description,
         image=utils.preview,
-        meta=utils.index_meta       
+        meta=utils.index_meta,
+        on_load=PageState.check_live       
 )
 def index() -> rx.Component:
     # return rx.text("Hola Reflex!", color="blue")
@@ -25,7 +26,7 @@ def index() -> rx.Component:
         navbar(),
         rx.center(
             rx.vstack(
-                header(),
+                header(live=PageState.is_live),
                 index_links(),
                 sponsors(),
                 width="100%",
