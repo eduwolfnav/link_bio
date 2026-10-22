@@ -15,7 +15,7 @@ python -c "import zipfile; zipfile.ZipFile('frontend.zip').extractall('public')"
 deactivate
 
 # Ejecutar bash build.sh
-# & "C:\Program Files\Git\bin\bash.exe" build.sh
+# & "C:\Program Files\Git\bin\bash.exe" local_build.sh
 
 # PD: Antes de ejecutar, correc bash con .venv deactivate
 
