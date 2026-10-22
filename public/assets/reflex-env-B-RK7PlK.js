@@ -1,0 +1,1 @@
+var e={PING:`https://eduwolfnav.up.railway.app/ping`,EVENT:`wss://eduwolfnav.up.railway.app/_event`,UPLOAD:`https://eduwolfnav.up.railway.app/_upload`,AUTH_CODESPACE:`https://eduwolfnav.up.railway.app/auth-codespace`,HEALTH:`https://eduwolfnav.up.railway.app/_health`,ALL_ROUTES:`https://eduwolfnav.up.railway.app/_all_routes`,TRANSPORT:`websocket`,TEST_MODE:!1};export{e as t};
