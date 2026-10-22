@@ -3,3 +3,4 @@ reflex==0.9.12
 fastapi
 python-dotenv
 requests
+supabase

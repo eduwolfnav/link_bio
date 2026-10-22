@@ -9,6 +9,7 @@ from link_bio.pages.testasyncio import testasyncio
 from link_bio.api.api import hello, live
 
 
+
 # 1. Creamos la app de FastAPI para las APIs personalizadas
 fastapi_app = FastAPI()
 

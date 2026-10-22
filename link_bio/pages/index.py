@@ -16,7 +16,7 @@ import asyncio
         description=utils.index_description,
         image=utils.preview,
         meta=utils.index_meta,
-        on_load=PageState.check_live       
+        on_load=[PageState.check_live, PageState.featured_links]       
 )
 def index() -> rx.Component:
     # return rx.text("Hola Reflex!", color="blue")
@@ -26,8 +26,11 @@ def index() -> rx.Component:
         navbar(),
         rx.center(
             rx.vstack(
-                header(live=PageState.is_live),
-                index_links(),
+                header(
+                    live=PageState.is_live,
+                    live_title=PageState.live_title
+                ),
+                index_links(PageState.featured_info),
                 sponsors(),
                 width="100%",
                 max_width=styles.MAX_WIDTH,

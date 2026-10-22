@@ -45,8 +45,9 @@ def testasyncio() -> rx.Component:
         rx.center(
             rx.vstack(
                 header(
-                    False,
-                    PageState.is_live
+                    details=False,
+                    live=PageState.is_live,
+                    live_title=PageState.live_title
                 ),
                 
                 # Contenedor para lo amarillo con espacio extra arriba y abajo

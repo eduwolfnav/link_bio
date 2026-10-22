@@ -13,8 +13,8 @@ def footer() -> rx.Component:
             alt="Logotipo de EduWolf. Un cabeza de lobo arriba de frente, con Edu Wolf escrito abajo."
         ),
         rx.link(
-            f"HomePage @{datetime.date.today().year} https://eduwolf.nav",
-            href="https://eduwolf.nav",
+            f"HomePage @{datetime.date.today().year} https://eduwolfnav.vercel.app/",
+            href="https://eduwolfnav.vercel.app/",
             is_external=True,
             font_size=Size.MEDIUM.value,
             text_align="center",

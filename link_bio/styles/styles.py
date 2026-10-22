@@ -19,7 +19,8 @@ class Size(Enum):
 STYLESHEETS = [
     "https://fonts.googleapis.com/css2?family=Rationale&display=swap",
     "https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap",
-    "/responsive.css"
+    "/responsive.css",
+    "/animations.css",  # <--- Agregado aquí
 ]
 
 # Styles
