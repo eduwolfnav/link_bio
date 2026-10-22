@@ -1,5 +1,6 @@
 #!/bin/bash
 #!/bin/bash
+export PYTHONUTF8=1
 set -e
 
 pip install --upgrade pip

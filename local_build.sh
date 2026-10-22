@@ -1,4 +1,5 @@
 #!/bin/bash
+export PYTHONUTF8=1
 
 source .venv/Scripts/activate
 
