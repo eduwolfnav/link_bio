@@ -7,16 +7,36 @@ def sponsors() -> rx.Component:
         title("Colaboran"),
         rx.hstack(
             link_sponsor(
-                "python.png",
+                "python.jpg",
                 url="https://www.python.org/"
             ),
             link_sponsor(
-                "mongodb.png",
-                url="https://www.mongodb.com/es"
+                "fastapi.jpg",
+                url="https://fastapi.tiangolo.com/"
             ),
             link_sponsor(
-                "Reflex.jpg",
+                "reflex.jpg",
                 url="https://reflex.dev/"
+            ),
+            link_sponsor(
+                "dockerfile.jpg",
+                url="https://www.docker.com/"
+            ),
+            link_sponsor(
+                "github.jpg",
+                url="https://github.com/"
+            ),
+            link_sponsor(
+                "vercel.jpg",
+                url="https://vercel.com/"
+            ),
+            link_sponsor(
+                "railway.jpg",
+                url="https://railway.com/"
+            ),
+            link_sponsor(
+                "supabase.jpg",
+                url="https://supabase.com/"
             ),
             spacing="3",
             align="center"
