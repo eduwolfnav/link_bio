@@ -15,7 +15,7 @@ def sponsors() -> rx.Component:
                 url="https://fastapi.tiangolo.com/"
             ),
             link_sponsor(
-                "reflex.jpg",
+                "reflexlogo.jpg",
                 url="https://reflex.dev/"
             ),
             link_sponsor(
