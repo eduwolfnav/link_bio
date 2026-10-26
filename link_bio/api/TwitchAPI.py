@@ -9,6 +9,8 @@ import dotenv
 import requests
 import time
 
+from link_bio.model.Live import Live
+
 class TwitchAPI:
     dotenv.load_dotenv()
 
@@ -41,7 +43,7 @@ class TwitchAPI:
     def token_valid(self) -> bool:
         return self.token is not None and time.time() < self.token_expired
 
-    def live(self, user: str) -> dict:
+    def live(self, user: str) -> Live:
         if not self.token_valid():
             self.generate_token()
 
@@ -65,6 +67,7 @@ class TwitchAPI:
             data = response.json().get("data", [])
             if len(data) > 0:
                 print(data[0]["title"])
-                return {"live": True, "title": data[0]["title"]}
+                return Live(live=True, title=data[0]["title"])
+                # return {"live": True, "title": data[0]["title"]}
 
-        return {"live": False, "title": ""}
+        return Live(live=False, title="")

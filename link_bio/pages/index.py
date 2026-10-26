@@ -27,8 +27,8 @@ def index() -> rx.Component:
         rx.center(
             rx.vstack(
                 header(
-                    live=PageState.is_live,
-                    live_title=PageState.live_title
+                    details=True, 
+                    live=PageState.live_status
                 ),
                 index_links(PageState.featured_info),
                 sponsors(),

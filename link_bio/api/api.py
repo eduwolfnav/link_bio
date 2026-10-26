@@ -2,6 +2,7 @@ import asyncio
 import link_bio.constants as const
 from .TwitchAPI import TwitchAPI
 from .SupabaseAPI import SupabaseAPI
+from link_bio.model.Live import Live
 
 twitch_api = TwitchAPI()
 supabase_api = SupabaseAPI()
@@ -10,7 +11,7 @@ async def hello() -> str:
     await asyncio.sleep(4)
     return "Mensaje cargado con exito..."
 
-async def live(user: str) -> dict:
+async def live(user: str) -> Live:
     return twitch_api.live(user)
     
     #if user == "eduwolfnav":

@@ -30,8 +30,7 @@ def courses() -> rx.Component:
             rx.vstack(
                 header(
                     details=False,
-                    live=PageState.is_live,
-                    live_title=PageState.live_title
+                    live=PageState.live_status
                 ),
                 courses_links(),
                 sponsors(),

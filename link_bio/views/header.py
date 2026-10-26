@@ -6,8 +6,9 @@ from link_bio.components.info_text import info_text
 from link_bio.styles.styles import Size as Size
 from link_bio.styles.colors import Color as Color
 from link_bio.styles.colors import TextColor as TextColor
+from link_bio.model.Live import Live
 
-def header(details = True, live=False, live_title = "") -> rx.Component:
+def header(details = True, live = Live(live=False, title="")) -> rx.Component:
     return rx.vstack(
         # 1. Perfil principal (Avatar, nombre y redes sociales - siempre visible)
         rx.hstack(
@@ -22,7 +23,7 @@ def header(details = True, live=False, live_title = "") -> rx.Component:
                     border_color=Color.CONTENT.value,
                 ),
                 rx.cond(
-                    live,
+                    live.live,
                     rx.link(
                         rx.box(
                             rx.image(
@@ -87,10 +88,10 @@ def header(details = True, live=False, live_title = "") -> rx.Component:
 
                 # 3. Botón En vivo (Se muestra si live=True en cualquier página)
         rx.cond(
-            live,
+            live.live,
             link_button(
                 "En vivo",
-                live_title,
+                live.title,
                 "icons/twitch.svg",
                 "https://www.twitch.tv/eduwolfnav",
                 is_external=True,
