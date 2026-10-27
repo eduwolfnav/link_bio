@@ -1,4 +1,5 @@
 import reflex as rx
+import link_bio.styles.styles as styles
 from link_bio.components.title import title
 
 
@@ -31,9 +32,7 @@ def featured_link(featured_items) -> rx.Component:
                             ),
                             rx.text(
                                 item["title"],
-                                font_weight="medium",
-                                font_size="0.95em",
-                                color="white",
+                                style=styles.button_title_style,
                                 no_of_lines=2,
                                 width="100%",
                             ),
@@ -59,7 +58,7 @@ def featured_link(featured_items) -> rx.Component:
                     "initial": "1",
                     "sm": "2",
                 },
-                gap="24px",  # separación entre cuadros
+                gap="24px",
                 width="100%",
             ),
             width="100%",
