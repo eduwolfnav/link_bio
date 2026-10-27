@@ -1,26 +1,20 @@
 import reflex as rx
-from link_bio.api.api import live, featured
+from link_bio.api.api import live
 from link_bio.api.SupabaseAPI import SupabaseAPI
 from link_bio.model.Live import Live
+from link_bio.model.Featured import featured
 
 USER = "eduwolfnav"
 
 class PageState(rx.State):
 
-    # is_live: bool = False
-    # live_title: str = ""
     live_status: Live = Live(live=False, title="")
-    featured_info: list[dict] = []
+    featured_info: list[featured] = []
 
     async def check_live(self):
         self.live_status = await live(USER)
-        # live_data = await live(USER)
-        # self.is_live = live_data.get("live", False)
-        # self.live_title = live_data.get("title") or ""
 
-    featured_info: list[dict] = []
-
-    async def featured_links(self):
+    def featured_links(self):
         """Método que se conecta a Supabase y actualiza la lista"""
         api = SupabaseAPI()
         self.featured_info = api.featured()

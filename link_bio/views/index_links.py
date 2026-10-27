@@ -1,10 +1,11 @@
 import reflex as rx
 from link_bio.components.link_button import link_button
 from link_bio.components.title import title
+from link_bio.components.featured_link import featured_link
 from link_bio.routes import Route
+from link_bio.model.Featured import featured
 
-
-def index_links(featured: list[dict]) -> rx.Component:
+def index_links(featured: list[featured]) -> rx.Component:
     return rx.vstack(
         title("Ejemplo Asyncio"),
         link_button(
@@ -15,54 +16,8 @@ def index_links(featured: list[dict]) -> rx.Component:
             is_external=False
         ),
 
-        rx.cond(
-            featured.length() > 0,
-            rx.vstack(
-                title("Destacados"),
-                rx.vstack(
-                    rx.foreach(
-                        featured.to(list[dict]),
-                        lambda item: rx.link(
-                            rx.vstack(
-                                rx.image(
-                                    src=item["image"],
-                                    width="100%",
-                                    height="auto",
-                                    border_radius="8px",
-                                    object_fit="cover",
-                                ),
-                                rx.text(
-                                    item["title"],
-                                    font_weight="medium",
-                                    font_size="0.95em",
-                                    color="white",
-                                ),
-                                width="100%",
-                                spacing="3",
-                                align_items="start",
-                            ),
-                            href=item["url"],
-                            is_external=True,
-                            width="100%",
-                            padding="14px",
-                            border_radius="12px",
-                            border="1px solid",
-                            border_color="#1e293b",
-                            background_color="#0f172a",
-                            _hover={
-                                "border_color": "#3b82f6",
-                                "transform": "scale(1.01)",
-                                "transition": "all 0.2s ease-in-out",
-                            },
-                        ),
-                    ),
-                    width="100%",
-                    spacing="3",
-                ),
-                width="100%",
-            ),
-            rx.fragment(),
-        ),
+        # Aquí antes tenías 40 líneas, ahora es 1
+        featured_link(featured),
         
         title("Cursos recomendados"),
         link_button(

@@ -3,6 +3,7 @@ import link_bio.constants as const
 from .TwitchAPI import TwitchAPI
 from .SupabaseAPI import SupabaseAPI
 from link_bio.model.Live import Live
+from link_bio.model.Featured import featured
 
 twitch_api = TwitchAPI()
 supabase_api = SupabaseAPI()
@@ -18,5 +19,5 @@ async def live(user: str) -> Live:
     #    return True
     #return False
 
-async def featured() -> list:
+async def featured() -> list[featured]:
     return supabase_api.featured()
