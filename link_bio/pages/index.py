@@ -16,7 +16,7 @@ import asyncio
         description=utils.index_description,
         image=utils.preview,
         meta=utils.index_meta,
-        on_load=[PageState.check_live, PageState.featured_links]       
+        on_load=[PageState.check_live, PageState.featured_links, PageState.get_live_schedule]       
 )
 def index() -> rx.Component:
     # return rx.text("Hola Reflex!", color="blue")

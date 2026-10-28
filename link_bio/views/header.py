@@ -8,6 +8,9 @@ from link_bio.styles.colors import Color as Color
 from link_bio.styles.colors import TextColor as TextColor
 from link_bio.model.Live import Live
 
+from link_bio.components.live_schedule import live_schedule
+from link_bio.state.PageState import PageState
+
 def header(details = True, live = Live(live=False, title="")) -> rx.Component:
     return rx.vstack(
         # 1. Perfil principal (Avatar, nombre y redes sociales - siempre visible)
@@ -86,7 +89,7 @@ def header(details = True, live = Live(live=False, title="")) -> rx.Component:
             align="center"
         ),
 
-                # 3. Botón En vivo (Se muestra si live=True en cualquier página)
+        # 3. Botón En vivo (Se muestra si live=True en cualquier página)
         rx.cond(
             live.live,
             link_button(
@@ -117,6 +120,11 @@ def header(details = True, live = Live(live=False, title="")) -> rx.Component:
             )
         ),
 
+        # 2.5 LIVE SCHEDULE - ConfigCat (minimalista, ordenado) - TU LÍNEA ROJA
+        rx.cond(
+            details,
+            live_schedule(PageState.live_schedule),
+        ),
 
         # 4. Texto descriptivo (Solo si details=True)
         rx.cond(
@@ -147,11 +155,11 @@ def header(details = True, live = Live(live=False, title="")) -> rx.Component:
                             "https://moure.dev/",
                             href="https://moure.dev/",
                             is_external=True,
-                            color="#38bdf8",            # Celeste brillante de alta visibilidad
-                            font_weight="bold",         # Negrita para destacar
+                            color="#38bdf8",
+                            font_weight="bold",
                             text_decoration="underline",
                             _hover={
-                                "color": "#93c5fd",     # Tono más claro al pasar el ratón
+                                "color": "#93c5fd",
                             },
                         ),
                         color=TextColor.BODY.value,
