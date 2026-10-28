@@ -15,7 +15,7 @@ fastapi_app = FastAPI()
 
 # 2. Agregamos la ruta usando FastAPI directamente
 # fastapi_app.add_api_route("/hello", hello)
-# fastapi_app.add_api_route("/hola", hello)
+fastapi_app.add_api_route("/hola", hello)
 
 fastapi_app.add_api_route("/live/{user}", live)
 

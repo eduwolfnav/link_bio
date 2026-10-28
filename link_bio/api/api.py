@@ -10,7 +10,7 @@ supabase_api = SupabaseAPI()
 
 async def hello() -> str:
     await asyncio.sleep(4)
-    return "Mensaje cargado con exito..."
+    return "Backend: Mensaje cargado con exito."
 
 async def live(user: str) -> Live:
     return twitch_api.live(user)
