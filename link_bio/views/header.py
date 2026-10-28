@@ -125,6 +125,7 @@ def header(details = True, live = Live(live=False, title="")) -> rx.Component:
             details,
             live_schedule(PageState.live_schedule),
         ),
+        
 
         # 4. Texto descriptivo (Solo si details=True)
         rx.cond(
@@ -178,6 +179,6 @@ def header(details = True, live = Live(live=False, title="")) -> rx.Component:
             )
         ),
 
-        spacing="3",
+        spacing="4",
         width="100%"
     )
