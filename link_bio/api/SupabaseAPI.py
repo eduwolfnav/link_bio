@@ -16,7 +16,7 @@ class SupabaseAPI:
 
         supabase: Client = create_client(url, key)
         # Orden ascendente: 1, 2, 3...
-        response = supabase.table("featured").select("*").order("id", desc=False).execute()
+        response = supabase.table("featured").select("*").order("id", desc=False).limit(2).execute()
 
 # Si los quieres al revés, 3, 2, 1:
 # response = supabase.table("featured").select("*").order("id", desc=True).execute()
