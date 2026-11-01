@@ -38,6 +38,10 @@ def sponsors() -> rx.Component:
                 "supabase.jpg",
                 url="https://supabase.com/"
             ),
+            link_sponsor(
+                "configcat.jpg",
+                url="https://configcat.com/"
+            ),
             spacing="3",
             align="center"
         ),

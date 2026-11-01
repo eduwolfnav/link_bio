@@ -1,0 +1,75 @@
+ANÁLISIS DEL PROYECTO link_bio
+
+1. DESCRIPCIÓN GENERAL
+Este es un proyecto fullstack desarrollado con Python usando el framework Reflex, que permite crear interfaces web reactivas solo con Python (sin JavaScript). El proyecto implementa una aplicación de tipo "linktree" personalizada para mostrar enlaces a redes sociales, cursos y otros recursos.
+
+2. ESTRUCTURA DEL PROYECTO
+- Directorio raíz: Contiene archivos de configuración, scripts de despliegue y documentación
+- link_bio/: Directorio principal del proyecto con la lógica de la aplicación
+  - components/: Componentes reutilizables de la interfaz
+  - views/: Vistas principales de la aplicación (header, sponsors, links)
+  - api/: Implementación de APIs externas (Twitch, Supabase)
+  - state/: Estado de la aplicación (PageState.py)
+  - styles/: Estilos y configuraciones de estilo
+  - pages/: Páginas principales de la aplicación (index.py, courses.py)
+  - model/: Modelos de datos utilizados en la aplicación
+- .github/workflows/: Configuración de GitHub Actions para despliegue automático
+- assets/: Recursos estáticos como imágenes
+- public/: Directorio generado automáticamente con el frontend compilado
+
+3. TECNOLOGÍAS UTILIZADAS
+- Reflex: Framework fullstack para Python
+- FastAPI: Para crear endpoints de API
+- Supabase: Base de datos y servicio backend
+- Docker: Contenedores para despliegue
+- GitHub Actions: Automatización de despliegue
+- Vercel: Hosting del frontend
+- Railway: Hosting del backend
+
+4. FUNCIONALIDADES PRINCIPALES
+- Página principal con información personal
+- Integración con Twitch API para verificar si el usuario está en vivo
+- Conexión a Supabase para obtener enlaces destacados
+- Sistema de estado reactivo para manejar la información dinámica
+- Despliegue automatizado mediante GitHub Actions
+
+5. ARCHIVOS CLAVE
+- link_bio.py: Punto de entrada principal de la aplicación
+- routes.py: Definición de rutas de la aplicación
+- constants.py: Constantes utilizadas en la aplicación (URLs, IDs)
+- PageState.py: Estado de la aplicación con métodos async para obtener datos
+- api/api.py: Implementación de las APIs externas
+- README.md: Documentación completa del proyecto
+
+6. FLUJO DE DESPLIEGUE
+El proyecto sigue un flujo de despliegue automatizado:
+1. Git push a master
+2. GitHub Actions ejecuta el build estático en Ubuntu
+3. Se genera el directorio public/ con el frontend compilado
+4. Se hace commit automático del build generado
+5. Vercel sirve el frontend desde public/
+6. Railway despliega el backend desde Dockerfile
+
+7. CONFIGURACIÓN Y DEPENDENCIAS
+- requirements.txt: Contiene las dependencias principales (reflex, fastapi, supabase, etc.)
+- rxconfig.py: Configuración de Reflex con CORS y URL de API
+- .env: Variables de entorno necesarias para conectarse a servicios externos
+
+8. CARACTERÍSTICAS TÉCNICAS
+- Desarrollo en Python 3.13
+- Uso de async/await para operaciones asíncronas
+- Componentización del frontend con Reflex
+- Integración con APIs externas (Twitch, Supabase)
+- Soporte responsive y estilos personalizados
+
+9. NOTAS IMPORTANTES
+- El proyecto está configurado para funcionar con variables de entorno en producción
+- Se implementan buenas prácticas de desarrollo como el uso de estado reactivo
+- La estructura permite fácil mantenimiento y escalabilidad
+- Incluye documentación detallada en README.md
+
+10. POSIBLES MEJORAS
+- Agregar tests con pytest
+- Proteger APIs con variables en Railway/Vercel
+- Eliminar el directorio public/ del repositorio y usar solo la Action como fuente de verdad
+- Implementar más páginas dinámicas desde Supabase
