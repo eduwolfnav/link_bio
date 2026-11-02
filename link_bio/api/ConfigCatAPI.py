@@ -6,7 +6,6 @@ import json
 class ConfigCatAPI:
 
     def __init__(self) -> None:
-        # Cargar .env siempre dentro del init, no a nivel de clase
         dotenv.load_dotenv()
         self.configcat_sdk_key = os.environ.get("CONFIGCAT_SDK_KEY")
         
@@ -15,26 +14,26 @@ class ConfigCatAPI:
             self.configcat = configcatclient.get(self.configcat_sdk_key)
 
     def schedule(self) -> dict:
-        # Fallback por si no hay SDK key o no hay conexión
-        default_schedule = {"lunes": "19:00hrs", "martes": "19:00hrs"}
+        # Tu diccionario real para usar en la app
+        default_schedule_dict = {"lunes": "19:00hrs", "martes": "19:00hrs"}
+        # El mismo, pero convertido a texto para que ConfigCat no se queje
+        default_schedule_str = json.dumps(default_schedule_dict)
 
         if self.configcat is None:
-            return default_schedule
+            return default_schedule_dict
 
-        # Pide el flag. Si en ConfigCat lo tienes como JSON, pon default como dict
-        # Si lo tienes como TEXT, pon default como string JSON
-        response = self.configcat.get_value("live_schedule", default_schedule)
+        # AQUÍ ESTÁ EL ARREGLO: le pasamos STRING, no dict
+        response = self.configcat.get_value("live_schedule", default_schedule_str)
 
-        # Caso 1: ConfigCat ya te devolvió un dict (modo JSON)
+        # Si ya viene como dict (por si en el futuro lo cambias a JSON real)
         if isinstance(response, dict):
             return response
 
-        # Caso 2: te devolvió un string, hay que parsearlo
+        # Si viene como string (como lo tienes ahora en ConfigCat)
         if isinstance(response, str) and response.strip():
             try:
                 return json.loads(response)
             except json.JSONDecodeError:
-                # Si no es JSON válido, devuélvelo como texto
                 return {"horario": response}
 
-        return default_schedule
+        return default_schedule_dict
