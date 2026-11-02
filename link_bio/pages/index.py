@@ -28,7 +28,8 @@ def index() -> rx.Component:
             rx.vstack(
                 header(
                     details=True, 
-                    live=PageState.live_status
+                    live=PageState.live_status,
+                    next_live=PageState.next_live
                 ),
                 index_links(PageState.featured_info),
                 sponsors(),

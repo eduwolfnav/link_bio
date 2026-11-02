@@ -14,22 +14,26 @@ class ConfigCatAPI:
             self.configcat = configcatclient.get(self.configcat_sdk_key)
 
     def schedule(self) -> dict:
-        # Tu diccionario real para usar en la app
-        default_schedule_dict = {"": ""}
-        # El mismo, pero convertido a texto para que ConfigCat no se queje
+        # FIX: default real, no vacío
+        default_schedule_dict = {
+            "0": "18:00hrs",
+            "1": "19:00hrs",
+            "2": "21:00hrs",
+            "3": "22:00hrs",
+            "4": "22:00hrs"
+        }
         default_schedule_str = json.dumps(default_schedule_dict)
 
         if self.configcat is None:
+            print(f"DEBUG: sin SDK KEY, usando default: {default_schedule_dict}")
             return default_schedule_dict
 
-        # AQUÍ ESTÁ EL ARREGLO: le pasamos STRING, no dict
         response = self.configcat.get_value("live_schedule", default_schedule_str)
+        print(f"DEBUG ConfigCat raw response: {response}") # ESTE SI SE VE
 
-        # Si ya viene como dict (por si en el futuro lo cambias a JSON real)
         if isinstance(response, dict):
             return response
 
-        # Si viene como string (como lo tienes ahora en ConfigCat)
         if isinstance(response, str) and response.strip():
             try:
                 return json.loads(response)

@@ -11,7 +11,7 @@ from link_bio.model.Live import Live
 from link_bio.components.live_schedule import live_schedule
 from link_bio.state.PageState import PageState
 
-def header(details = True, live = Live(live=False, title="")) -> rx.Component:
+def header(details = True, live = Live(live=False, title=""), next_live="") -> rx.Component:
     return rx.vstack(
         # 1. Perfil principal (Avatar, nombre y redes sociales - siempre visible)
         rx.hstack(
@@ -101,6 +101,19 @@ def header(details = True, live = Live(live=False, title="")) -> rx.Component:
                 background_color=Color.BACKGROUND.value,
                 border_color=Color.PURPLE.value,
                 border_width="2px"
+            ),
+            rx.cond(
+                next_live,
+                link_button(
+                    "Proximo live",
+                    next_live,
+                    "icons/twitch.svg",
+                    "https://www.twitch.tv/eduwolfnav",
+                    is_external=True,
+                    background_color=Color.BACKGROUND.value,
+                    border_color=Color.PURPLE.value,
+                    border_width="2px"
+                ),
             ),
         ),
 
