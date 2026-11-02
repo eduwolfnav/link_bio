@@ -123,7 +123,11 @@ def header(details = True, live = Live(live=False, title="")) -> rx.Component:
         # 2.5 LIVE SCHEDULE - ConfigCat (minimalista, ordenado) - TU LÍNEA ROJA
         rx.cond(
             details,
-            live_schedule(PageState.live_schedule),
+            rx.box(
+                live_schedule(PageState.live_schedule),
+                margin_top=Size.SMALL.value, # <- AGREGA esto para control fino
+                width="100%"
+            ),
         ),
         
 
@@ -179,6 +183,6 @@ def header(details = True, live = Live(live=False, title="")) -> rx.Component:
             )
         ),
 
-        spacing="4",
+        spacing="3",
         width="100%"
     )

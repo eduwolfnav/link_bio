@@ -2,11 +2,17 @@ import reflex as rx
 from link_bio.styles.styles import Size as Size
 from link_bio.styles.colors import Color as Color
 from link_bio.styles.colors import TextColor as TextColor
-from link_bio.components.title import title
 
 def live_schedule(schedule: dict) -> rx.Component:
     return rx.vstack(
-        title("Live Schedule"),
+        rx.heading(
+            "Live Schedule",
+            size="4",
+            color=TextColor.BODY.value,
+            width="100%",
+            padding_top=Size.ZERO.value, # <- FIX: sin padding extra
+            margin_top=Size.ZERO.value
+        ),
         rx.box(
             rx.vstack(
                 rx.foreach(
@@ -31,7 +37,8 @@ def live_schedule(schedule: dict) -> rx.Component:
             border=f"2px solid {Color.PURPLE.value}",
         ),
         width="100%",
-        spacing="4",
-        padding_top=Size.SMALL.value,
+        spacing="2", # <- FIX: era 4, ahora 2
+        padding_top=Size.ZERO.value, # <- FIX: era SMALL, ahora ZERO
+        margin_top=Size.ZERO.value,
         align_items="start",
     )
