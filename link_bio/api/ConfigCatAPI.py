@@ -15,7 +15,7 @@ class ConfigCatAPI:
 
     def schedule(self) -> dict:
         # Tu diccionario real para usar en la app
-        default_schedule_dict = {"lunes": "19:00hrs", "martes": "19:00hrs"}
+        default_schedule_dict = {"": ""}
         # El mismo, pero convertido a texto para que ConfigCat no se queje
         default_schedule_str = json.dumps(default_schedule_dict)
 

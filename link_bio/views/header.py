@@ -78,7 +78,7 @@ def header(details = True, live = Live(live=False, title="")) -> rx.Component:
                         "icons/icon_github.svg",
                         "https://github.com/eduwolfnav"
                     ),
-                    spacing="3"
+                    spacing="2"
                 ),
                 align_items="start",
                 spacing="1",
@@ -175,7 +175,7 @@ def header(details = True, live = Live(live=False, title="")) -> rx.Component:
                 border_radius="12px",
                 border=f"1px solid {Color.BORDER.value}",
                 width="100%",
-                margin_top=Size.DEFAULT.value
+                margin_top=Size.SMALL.value
             )
         ),
 
