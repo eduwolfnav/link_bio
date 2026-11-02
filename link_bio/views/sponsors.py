@@ -5,7 +5,7 @@ from link_bio.components.link_sponsor import link_sponsor
 def sponsors() -> rx.Component:
     return rx.vstack(
         title("Colaboran"),
-        rx.hstack(
+        rx.grid(
             link_sponsor(
                 "python.jpg",
                 url="https://www.python.org/"
@@ -42,8 +42,10 @@ def sponsors() -> rx.Component:
                 "configcat.jpg",
                 url="https://configcat.com/"
             ),
+            # si agregas un décimo acá, se irá solo a la 2da fila
+            columns="7", # <- máximo 7 por línea
             spacing="3",
-            align="center"
+            width="100%",
         ),
         width="100%",
         align_items="start",
