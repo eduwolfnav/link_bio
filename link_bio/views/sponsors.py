@@ -7,39 +7,39 @@ def sponsors() -> rx.Component:
                 title("Colaboran"),
                 rx.grid(
                     link_sponsor(
-                        "python.jpg",
+                        "python.png",
                         url="https://www.python.org/"
                     ),
                     link_sponsor(
-                        "fastapi.jpg",
+                        "fastapi.png",
                         url="https://fastapi.tiangolo.com/"
                     ),
                     link_sponsor(
-                        "reflexlogo.jpg",
+                        "reflex.png",
                         url="https://reflex.dev/"
                     ),
                     link_sponsor(
-                        "dockerfile.jpg",
+                        "dockerfile.png",
                         url="https://www.docker.com/"
                     ),
                     link_sponsor(
-                        "github.jpg",
+                        "github.png",
                         url="https://github.com/"
                     ),
                     link_sponsor(
-                        "vercel.jpg",
+                        "vercel.png",
                         url="https://vercel.com/"
                     ),
                     link_sponsor(
-                        "railway.jpg",
+                        "railway.png",
                         url="https://railway.com/"
                     ),
                     link_sponsor(
-                        "supabase.jpg",
+                        "supabase.png",
                         url="https://supabase.com/"
                     ),
                     link_sponsor(
-                        "configcat.jpg",
+                        "configcat.png",
                         url="https://configcat.com/"
                     ),
                     # si agregas un décimo acá, se irá solo a la 2da fila

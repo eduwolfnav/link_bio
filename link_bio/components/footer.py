@@ -7,7 +7,7 @@ from link_bio.styles.colors import TextColor as TextColor
 def footer() -> rx.Component:
     return rx.vstack(
         rx.image(
-            src="favicon.ico",
+            src="eduwolf_logo.png",
             width="77px",
             height="77px",
             alt="Logotipo de EduWolf. Un cabeza de lobo arriba de frente, con Edu Wolf escrito abajo."
