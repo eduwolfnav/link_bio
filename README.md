@@ -111,6 +111,90 @@ Commit auto "Update static build" con public/ → master (loop)
 6. **Railway:** Construye backend Dockerfile, `pip install -r requirements.txt`, `reflex db migrate`, `reflex run --env prod` a `eduwolfnav.up.railway.app`.
 7. **Producción:** Browser Vercel llama API Railway, Railway usa `SupabaseAPI.py` + `TwitchAPI.py` + `ConfigCatAPI.py` con fallbacks elegantes.
 
+
+### 🤖 GitHub Actions en Detalle - `remote_build.yml`
+
+Archivo: `.github/workflows/remote_build.yml`
+
+Este workflow es el corazón de tu CI. Resuelve un problema de Reflex: Vercel no sabe buildear Reflex, solo sirve archivos estáticos. Por eso el build lo hace GitHub Actions, no Vercel.
+
+```yaml
+name: Static Build
+on:
+  push:
+    branches: [master]
+jobs:
+  build:
+    if: github.repository == 'eduwolfnav/link_bio' # Evita correr en forks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Necesario para hacer push del commit auto
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Run build script
+        env:
+          REFLEX_API_URL: https://eduwolfnav.up.railway.app
+        run: bash ./remote_build.sh
+
+      - name: Commit and Push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update static build
+          commit_user_name: Edu Wolf [GitHub Actions]
+          commit_user_email: edu.wolf.nav@gmail.com
+          commit_author: Edu Wolf <edu.wolf.nav@gmail.com>
+```
+
+**Flujo paso a paso:**
+1. Haces `git push origin master` desde tu PC.
+2. GitHub detecta el push y lanza el runner `ubuntu-latest`.
+3. El runner instala Python 3.13 y corre `remote_build.sh`.
+4. `remote_build.sh` hace: `pip install -r requirements.txt` -> `rm -rf public` -> `reflex init` -> `reflex export --frontend-only` -> extrae `frontend.zip` a `public/`.
+5. Si `public/` cambió, la acción `git-auto-commit-action` hace un nuevo commit `Update static build` y lo pushea a `master`. Esto dispara el paso 6.
+6. Vercel detecta el nuevo commit con `public/` actualizado y publica en `eduwolfnav.vercel.app`.
+7. Railway en paralelo ya detectó tu push inicial y redeployó el backend Docker en `eduwolfnav.up.railway.app`.
+
+**Detalles pro que no comentamos antes:**
+- El `permissions: contents: write` es obligatorio, sin eso la Action no puede pushear. Es seguro.
+- El `if: repository == ...` evita que te gasten minutos de Actions si alguien hace fork.
+- El loop es intencional: Push tuyo -> Action -> Push auto -> Vercel. Por eso **siempre debes hacer `git pull` antes de tu próximo push**, porque el remoto quedó un commit adelante.
+- Puedes ver los logs en: GitHub > Actions > Static Build > View runs.
+
+### 🖥️ `local_build.sh` vs `remote_build.sh` - ¿Cuándo usar cuál?
+
+Tienes dos scripts casi idénticos, con una diferencia clave:
+
+| Script | Dónde corre | Qué hace con venv | Uso |
+|---|---|---|---|
+| `local_build.sh` | En tu PC Windows | `source .venv/Scripts/activate` y `deactivate` | Para probar el build estático local sin ensuciar tu sistema global. |
+| `remote_build.sh` | En GitHub Actions Ubuntu | No activa venv (usa el runner limpio), solo `pip install` | Para CI/CD en la nube. |
+
+Ambos hacen exactamente lo mismo en el core:
+```bash
+export PYTHONUTF8=1
+pip install --upgrade pip
+pip install -r requirements.txt
+rm -rf public
+reflex init
+reflex export --frontend-only
+python -c "import zipfile; zipfile.ZipFile('frontend.zip').extractall('public')"
+```
+
+**¿Cuándo usar cada uno?**
+- **Día a día desarrollo:** No necesitas ninguno. Usa `reflex run`.
+- **Antes de push importante:** Corre en tu PC `bash ./local_build.sh` (con Git Bash). Te asegura que `public/` se genera bien y no romperás Vercel.
+- **En producción:** No lo tocas, lo corre GitHub Actions solo con `remote_build.sh`.
+
+> Tip detallista: En Windows, asegúrate de tener `.venv` desactivado antes de correr `local_build.sh` en Git Bash, como tenías anotado en tus comentarios.
+
+
 ---
 
 ## 📦 Estructura 32 archivos exactos
@@ -304,6 +388,11 @@ Todos en `assets/` normalizados hace 16h commit `Normalizacion`:
 - **Mantén `.env` fuera de GitHub.**
 - **Case-sensitive:** `rxconfig.py` no `Rxconfig.py`.
 - **Dockerfile:** Validado Railway autodetecta y usa Dockerfile para backend.
+
+---
+
+## 🏷️ Releases
+Actualmente en GitHub figura `No releases published`. Es normal. Los commits `Update static build` no son releases. Cuando quieras congelar una versión estable (ej: v1.0.0), crea una release manual con `git tag v1.0.0` y publícala en GitHub > Releases > Create a new release. Ideal para tu portfolio.
 
 ---
 
