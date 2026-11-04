@@ -71,7 +71,7 @@ def testasyncio() -> rx.Component:
                 width="100%",
                 max_width=styles.MAX_WIDTH,
                 align_items="start",
-                margin_y=Size.BIG.value,
+                margin_y=Size.DEFAULT.value,
                 padding_x=Size.DEFAULT.value,
                 spacing="4"
             ),
