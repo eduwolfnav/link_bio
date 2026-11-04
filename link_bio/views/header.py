@@ -11,9 +11,15 @@ from link_bio.model.Live import Live
 from link_bio.components.live_schedule import live_schedule
 from link_bio.state.PageState import PageState
 
+# Parpadeo solo del borde (definido en animations.css): lo usan los recuadros
+BLINK_CLASS = "border-blink"
+
+# Halo pequeño (definido en animations.css): lo usa el icono morado del avatar
+ICON_BLINK_CLASS = "icon-blink"
+
 def header(details = True, live = Live(live=False, title=""), next_live="") -> rx.Component:
     return rx.vstack(
-        # 1. Perfil principal (Avatar, nombre y redes sociales - siempre visible)
+        # 1. Perfil principal
         rx.hstack(
             rx.box(
                 rx.avatar(
@@ -45,7 +51,7 @@ def header(details = True, live = Live(live=False, title=""), next_live="") -> r
                             display="flex",
                             align_items="center",
                             justify_content="center",
-                            animation="pulse 1.0s infinite ease-in-out",
+                            class_name=ICON_BLINK_CLASS,
                         ),
                         href="https://www.twitch.tv/eduwolfnav",
                         is_external=True,
@@ -56,9 +62,7 @@ def header(details = True, live = Live(live=False, title=""), next_live="") -> r
                 flex_shrink="0",
             ),
             rx.vstack(
-                rx.heading(
-                    "Edu Wolf"
-                ),
+                rx.heading("Edu Wolf", font_weight="700"),
                 rx.text(
                     "@eduwolf.nav",
                     margin_top=Size.ZERO.value,
@@ -66,18 +70,9 @@ def header(details = True, live = Live(live=False, title=""), next_live="") -> r
                     color=TextColor.BODY.value
                 ),
                 rx.hstack(
-                    link_icon(
-                        "icons/icon_instagram.svg",
-                        "https://www.instagram.com/edu.wolf.nav"
-                    ),
-                    link_icon(
-                        "icons/icon_youtube.svg",
-                        "https://www.youtube.com/@EduWolf-g3f"
-                    ),
-                    link_icon(
-                        "icons/icon_github.svg",
-                        "https://github.com/eduwolfnav"
-                    ),
+                    link_icon("icons/icon_instagram.svg", "https://www.instagram.com/edu.wolf.nav"),
+                    link_icon("icons/icon_youtube.svg", "https://www.youtube.com/@EduWolf-g3f"),
+                    link_icon("icons/icon_github.svg", "https://github.com/eduwolfnav"),
                     spacing="2"
                 ),
                 align_items="start",
@@ -89,35 +84,47 @@ def header(details = True, live = Live(live=False, title=""), next_live="") -> r
             align="center"
         ),
 
-        # 3. Botón En vivo (Se muestra si live=True en cualquier página)
+        # 2. Botón En vivo / Próximo live - solo parpadea el borde
         rx.cond(
             live.live,
-            link_button(
-                "En vivo",
-                live.title,
-                "icons/twitch.svg",
-                "https://www.twitch.tv/eduwolfnav",
-                is_external=True,
-                background_color=Color.BACKGROUND.value,
-                border_color=Color.PURPLE.value,
-                border_width="2px"
-            ),
-            rx.cond(
-                next_live,
+            rx.box(
                 link_button(
-                    "Proximo live",
-                    next_live,
-                    "icons/twitch.svg",
+                    "En vivo",
+                    live.title,
+                    "/icons/twitch.svg",
                     "https://www.twitch.tv/eduwolfnav",
                     is_external=True,
                     background_color=Color.BACKGROUND.value,
-                    border_color=Color.PURPLE.value,
-                    border_width="2px"
+                    border_color="#9146ff",
+                    border_width="2px",
+                    animated=False
+                ),
+                width="100%",
+                border_radius=Size.DEFAULT.value,
+                class_name=BLINK_CLASS,
+            ),
+            rx.cond(
+                next_live,
+                rx.box(
+                    link_button(
+                        "Proximo live",
+                        next_live,
+                        "/icons/twitch.svg",
+                        "https://www.twitch.tv/eduwolfnav",
+                        is_external=True,
+                        background_color=Color.BACKGROUND.value,
+                        border_color=Color.PURPLE.value,
+                        border_width="2px",
+                        animated=False
+                    ),
+                    width="100%",
+                    border_radius=Size.DEFAULT.value,
+                    class_name=BLINK_CLASS,
                 ),
             ),
         ),
 
-        # 2. Estadísticas (Años de experiencia, apps, certificaciones - solo si details=True)
+        # 3. Estadísticas
         rx.cond(
             details,
             rx.flex(
@@ -133,57 +140,25 @@ def header(details = True, live = Live(live=False, title=""), next_live="") -> r
             )
         ),
 
-        # 2.5 LIVE SCHEDULE - ConfigCat (minimalista, ordenado) - TU LÍNEA ROJA
+        # 4. Live Schedule
         rx.cond(
             details,
             rx.box(
                 live_schedule(PageState.live_schedule),
-                margin_top=Size.SMALL.value, # <- AGREGA esto para control fino
+                margin_top=Size.SMALL.value,
                 width="100%"
             ),
         ),
-        
 
-        # 4. Texto descriptivo (Solo si details=True)
+        # 5. Texto descriptivo - COMPLETO, sin recortes
         rx.cond(
             details,
             rx.box(
                 rx.vstack(
-                    rx.text(
-                        "Este proyecto nace como un espacio de aprendizaje continuo y experimentación. Mi objetivo es dominar nuevas metodologías que impulsen mi crecimiento técnico, inspirándome en el verdadero arte de crear software.",
-                        color=TextColor.BODY.value,
-                        size="3",
-                        text_align="start",
-                    ),
-                    rx.text(
-                        "Para dar vida a este ecosistema, combino la potencia de Python y FastAPI para el desarrollo de servicios web y la integración con la API de Twitch, la agilidad de Reflex para la interfaz y la confiabilidad de Supabase como base de datos.",
-                        color=TextColor.BODY.value,
-                        size="3",
-                        text_align="start",
-                    ),
-                    rx.text(
-                        "En cuanto a infraestructura e integración, confío en GitHub para el control de versiones, Docker para la contenerización, y despliegues modernos a través de Vercel y Railway. Más que código, cada endpoint es una expresión de artesanía digital.",
-                        color=TextColor.BODY.value,
-                        size="3",
-                        text_align="start",
-                    ),
-                    rx.text(
-                        "Gracias ",
-                        rx.link(
-                            "https://moure.dev/",
-                            href="https://moure.dev/",
-                            is_external=True,
-                            color="#38bdf8",
-                            font_weight="bold",
-                            text_decoration="underline",
-                            _hover={
-                                "color": "#93c5fd",
-                            },
-                        ),
-                        color=TextColor.BODY.value,
-                        size="3",
-                        text_align="start",
-                    ),
+                    rx.text("Este proyecto nace como un espacio de aprendizaje continuo y experimentación. Mi objetivo es dominar nuevas metodologías que impulsen mi crecimiento técnico, inspirándome en el verdadero arte de crear software.", color=TextColor.BODY.value, size="3"),
+                    rx.text("Para dar vida a este ecosistema, combino la potencia de Python y FastAPI para el desarrollo de servicios web y la integración con la API de Twitch, la agilidad de Reflex para la interfaz y la confiabilidad de Supabase como base de datos.", color=TextColor.BODY.value, size="3"),
+                    rx.text("En cuanto a infraestructura e integración, confío en GitHub para el control de versiones, Docker para la contenerización, y despliegues modernos a través de Vercel y Railway. Más que código, cada endpoint es una expresión de artesanía digital.", color=TextColor.BODY.value, size="3"),
+                    rx.text("Gracias ", rx.link("https://moure.dev/", href="https://moure.dev/", is_external=True, color="#38bdf8", font_weight="bold", text_decoration="underline"), color=TextColor.BODY.value, size="3"),
                     spacing="3",
                     width="100%"
                 ),
@@ -195,7 +170,6 @@ def header(details = True, live = Live(live=False, title=""), next_live="") -> r
                 margin_top=Size.SMALL.value
             )
         ),
-
         spacing="3",
         width="100%"
     )

@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import re
 import reflex as rx
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 # Común
 def lang() -> rx.components:
@@ -33,15 +34,35 @@ cursos_meta = [
 ]
 cursos_meta.extend(_meta)
 
-# Date
-DIAS = {
-    "0": "Lunes",
-    "1": "Martes", 
-    "2": "Miércoles",
-    "3": "Jueves",
-    "4": "Viernes",
-    "5": "Sábado",
-    "6": "Domingo"
+# --- PARA ZONA HORARIA DEL CLIENTE ---
+LOCAL_TIMEZONE_SCRIPT = "Intl.DateTimeFormat().resolvedOptions().timeZone"
+
+# Tu zona horaria base: donde haces los directos
+BASE_TIMEZONE = "America/Santiago"
+
+WEEKDAYS = {
+    0: "Lunes",
+    1: "Martes", 
+    2: "Miércoles",
+    3: "Jueves",
+    4: "Viernes",
+    5: "Sábado",
+    6: "Domingo"
+}
+
+MONTHS = {
+    1: "Enero",
+    2: "Febrero",
+    3: "Marzo",
+    4: "Abril",
+    5: "Mayo",
+    6: "Junio",
+    7: "Julio",
+    8: "Agosto",
+    9: "Septiembre",
+    10: "Octubre",
+    11: "Noviembre",
+    12: "Diciembre"
 }
 
 def _parse_hour(raw: str) -> tuple[int, int] | None:
@@ -57,29 +78,54 @@ def _parse_hour(raw: str) -> tuple[int, int] | None:
         return hour, minute
     return None
 
-def next_date(dates: dict) -> str:
+def next_date(dates: dict, timezone: str = None) -> str:
     if not dates or len(dates) == 0:
         return ""
-    now = datetime.now().astimezone()
-    current_weekday = now.weekday()
+    
+    try:
+        client_tz = ZoneInfo(timezone) if timezone else datetime.now().astimezone().tzinfo
+        base_tz = ZoneInfo(BASE_TIMEZONE)
+    except (ZoneInfoNotFoundError, Exception):
+        client_tz = datetime.now().astimezone().tzinfo
+        base_tz = datetime.now().astimezone().tzinfo
 
-    for index in range(7):
-        day_key = str((current_weekday + index) % 7)
+    now_client = datetime.now(client_tz)
+    now_base = datetime.now(base_tz)
+    current_weekday = now_client.weekday()
+
+    for index in range(14): # Buscamos en 14 días por si el cambio de zona mueve el día
+        day_key = str((now_base.weekday() + index) % 7)
         if day_key not in dates or not dates[day_key]:
             continue
         parsed = _parse_hour(str(dates[day_key]))
         if parsed is None:
             continue
         hour, minute = parsed
-        candidate_datetime = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
-        if candidate_datetime > now or index > 0:
-            next_date_obj = now + timedelta(days=index)
-            if index == 0:
-                formated_next_date = next_date_obj.strftime("Hoy, %d/%m")
-            else:
-                nombre_dia = DIAS.get(day_key, day_key)
-                formated_next_date = f"{nombre_dia}, {next_date_obj.strftime("%d/%m")}"
-            formated_next_time = f"{hour:02d}:{minute:02d}"
-            return f"{formated_next_date} a las {formated_next_time} ({dates[day_key]} UTC)"
+
+        # 1. Creamos el próximo directo en tu zona base (Santiago)
+        next_date_base = (now_base + timedelta(days=index)).replace(
+            hour=hour, minute=minute, second=0, microsecond=0
+        )
+        
+        # Si es hoy pero ya pasó en tu zona base, saltamos
+        if next_date_base < now_base and index == 0:
+            continue
+
+        # 2. Convertimos esa hora a la zona del cliente
+        next_date_client = next_date_base.astimezone(client_tz)
+
+        # 3. Si la conversión deja la fecha en el pasado para el cliente, saltamos
+        if next_date_client < now_client:
+            continue
+
+        # Formato estilo MoureDev
+        if next_date_client.date() == now_client.date():
+            formated_date = f"Hoy, {next_date_client.day:02d} de {MONTHS[next_date_client.month]}"
+        else:
+            formated_date = f"{WEEKDAYS[next_date_client.weekday()]}, {next_date_client.day:02d} de {MONTHS[next_date_client.month]}"
+
+        tz_display = timezone.split("/")[-1].replace("_", " ") if timezone else "Local"
+        
+        return f"{formated_date} a las {next_date_client.hour:02d}:{next_date_client.minute:02d} | Zona horaria: {tz_display}"
 
     return ""

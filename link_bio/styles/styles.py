@@ -4,10 +4,8 @@ from .colors import Color as Color
 from .colors import TextColor as TextColor
 from .fonts import Font, FontWeight
 
-# Constants
-MAX_WIDTH = "600px"  # Puedes bajarlo a 500px o 600px
+MAX_WIDTH = "600px"
 
-# Sizes
 class Size(Enum):
     ZERO = "0px"
     SMALL = "0.7em"
@@ -17,23 +15,19 @@ class Size(Enum):
     BIG = "2em"
 
 STYLESHEETS = [
+    "https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap",
     "https://fonts.googleapis.com/css2?family=Rationale&display=swap",
-    "https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap",
-    "/responsive.css",
-    "/animations.css",  # <--- Agregado aquí
+    "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css",
+    "/animations.css"
 ]
 
-# Styles
 BASE_STYLE = {
     "font_family": Font.DEFAULT.value,
     "font_weight": FontWeight.LIGHT.value,
     "background_color": Color.BACKGROUND.value,
-    
-    # REGLAS CRÍTICAS PARA EL RESPONSIVE:
-    "box_sizing": "border-box",  # <-- Corregido con guion medio en 'border-box'
-    "overflow_x": "hidden",      # Previene cualquier scroll horizontal
+    "box_sizing": "border-box",
+    "overflow_x": "hidden",
     "max_width": "100%",
-    
     rx.heading: {
         "size": "6",
         "color": TextColor.BODY.value,
@@ -49,20 +43,14 @@ BASE_STYLE = {
         "background_color": Color.SECONDARY.value,
         "white_space": "normal",
         "text_align": "start",
-        "_hover": {
-            "background_color": Color.CONTENT.value
-        }
+        "_hover": {"background_color": Color.CONTENT.value}
     },
-    rx.link: {
-        "width": "100%",
-        "text_decoration": "none",
-        "_hover": {}
-    }
+    rx.link: {"width": "100%", "text_decoration": "none", "_hover": {}}
 }
 
 navbar_title_style = dict(
     font_family=Font.LOGO.value,
-    font_weight=FontWeight.MEDIUM.value,
+    font_weight="700",
     font_size=Size.DEFAULT.value
 )
 

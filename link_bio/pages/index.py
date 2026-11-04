@@ -7,14 +7,15 @@ from link_bio.components.footer import footer
 from link_bio.views.sponsors import sponsors
 import link_bio.styles.styles as styles
 from link_bio.styles.styles import Size as Size
+from link_bio.styles.colors import TextColor as TextColor
 from link_bio.state.PageState import PageState
 
 @rx.page(
-    title=utils.index_title,
-    description=utils.index_description,
-    image=utils.preview,
-    meta=utils.index_meta,
-    on_load=PageState.load_index_data       
+        title=utils.index_title,
+        description=utils.index_description,
+        image=utils.preview,
+        meta=utils.index_meta,
+        on_load=PageState.load_index_data       
 )
 def index() -> rx.Component:
     return rx.box(
@@ -23,18 +24,17 @@ def index() -> rx.Component:
         rx.center(
             rx.cond(
                 PageState.is_loading,
-                # LO QUE SE VE MIENTRAS CARGA
+                # Pantalla de carga: spinner + texto, centrado entre navbar y footer
                 rx.center(
                     rx.vstack(
                         rx.spinner(size="3"),
-                        rx.text("Loading...", color="gray"),
+                        rx.text("Loading...", color=TextColor.FOOTER.value),
+                        align="center",
                         spacing="3",
-                        align="center"
                     ),
                     height="60vh",
-                    width="100%"
+                    width="100%",
                 ),
-                # LO QUE SE VE CUANDO TERMINA
                 rx.vstack(
                     header(
                         details=True, 
@@ -53,5 +53,10 @@ def index() -> rx.Component:
             ),
             width="100%",
         ),
-        footer()
+        footer(),
+        # Zona horaria del cliente: directo en el root y sin lambda
+        on_mount=rx.call_script(
+            utils.LOCAL_TIMEZONE_SCRIPT,
+            callback=PageState.set_timezone
+        )
     )

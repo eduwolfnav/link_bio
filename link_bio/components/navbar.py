@@ -8,13 +8,20 @@ from link_bio.routes import Route
 
 def navbar() -> rx.Component:
     return rx.fragment(
-        # 1. Barra fija real
         rx.box(
             rx.hstack(
                 rx.link(
                     rx.hstack(
-                        rx.text("edu", color=Color.PRIMARY.value),
-                        rx.text("wolf.nav", color=Color.CONTENT.value),
+                        rx.text(
+                            "edu", 
+                            color=Color.PRIMARY.value,
+                            style=styles.navbar_title_style
+                        ),
+                        rx.text(
+                            "wolf.nav", 
+                            color=Color.CONTENT.value,
+                            style=styles.navbar_title_style
+                        ),
                         spacing="0",
                     ),
                     href=Route.INDEX.value,
@@ -23,24 +30,21 @@ def navbar() -> rx.Component:
                 float_button("/icons/donate.svg", "/"),
                 width="100%",
                 height="40px",
-                justify="start",
+                justify="between",
                 align="center",
                 padding_x=Size.DEFAULT.value,
                 padding_y=Size.DEFAULT.value,
-                spacing="0",
             ),
-            position="fixed", # <- fixed SIEMPRE funciona
+            position="fixed",
             top="0",
             left="0",
             right="0",
             width="100%",
             bg=Color.SECONDARY.value,
             z_index="999",
-            style=styles.navbar_title_style,
         ),
-        # 2. Espaciador invisible: empuja todo el contenido para que el lobo no quede debajo
         rx.box(
-            height="60px", # misma altura que tu barra + padding
+            height="60px",
             width="100%",
         )
     )
