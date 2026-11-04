@@ -1,3 +1,23 @@
+"""
+link_bio/views/header.py
+------------------------
+PROPÓSITO:
+Vista del encabezado principal de la página. Contiene avatar, redes, botón de live y bio.
+
+CÓMO SE CONECTA:
+- Es usado por pages/index.py como primera sección de la página.
+- Usa components/link_icon.py para iconos de redes sociales.
+- Usa components/link_button.py para botón "En vivo" / "Próximo live".
+- Usa components/info_text.py para estadísticas (experiencia, apps, certs).
+- Usa components/live_schedule.py para horario, con datos de state/PageState.py.
+- Usa model/Live.py para tipar el estado live.
+- BLINK_CLASS e ICON_BLINK_CLASS vienen de assets/animations.css.
+- Color y Size vienen de styles/ para mantener diseño consistente.
+
+FLUJO DE LIVE:
+TwitchAPI/SupabaseAPI -> Live (DB) -> PageState.live_schedule y live -> header()
+"""
+
 import reflex as rx
 
 from link_bio.components.link_icon import link_icon
@@ -11,15 +31,30 @@ from link_bio.model.Live import Live
 from link_bio.components.live_schedule import live_schedule
 from link_bio.state.PageState import PageState
 
-# Parpadeo solo del borde (definido en animations.css): lo usan los recuadros
+# Clase CSS para animación de borde parpadeante (definida en assets/animations.css)
 BLINK_CLASS = "border-blink"
 
-# Halo pequeño (definido en animations.css): lo usa el icono morado del avatar
+# Clase CSS para halo pulsante del icono de Twitch sobre el avatar
 ICON_BLINK_CLASS = "icon-blink"
 
-def header(details = True, live = Live(live=False, title=""), next_live="") -> rx.Component:
+def header(details=True, live=Live(live=False, title=""), next_live="") -> rx.Component:
+    """
+    Encabezado principal con 5 bloques.
+
+    Args:
+        details: Si False oculta estadísticas, schedule y bio (modo compacto para cursos)
+        live: Objeto Live (live: bool, title: str) - indica si estás en directo
+        next_live: String con fecha/hora del próximo live
+
+    Estructura:
+        1. Perfil: avatar + nombre + @ + iconos redes (link_icon)
+        2. Botón En vivo: link_button con borde morado animado si live.live=True
+        3. Estadísticas: info_text en flex row/column responsivo
+        4. Live Schedule: componente live_schedule con PageState.live_schedule
+        5. Bio: textos descriptivos sobre stack tecnológico
+    """
     return rx.vstack(
-        # 1. Perfil principal
+        # 1. Perfil principal: avatar con badge de Twitch si está en vivo
         rx.hstack(
             rx.box(
                 rx.avatar(
@@ -84,7 +119,7 @@ def header(details = True, live = Live(live=False, title=""), next_live="") -> r
             align="center"
         ),
 
-        # 2. Botón En vivo / Próximo live - solo parpadea el borde
+        # 2. Botón En vivo / Próximo live - borde parpadeante via CSS
         rx.cond(
             live.live,
             rx.box(
@@ -124,7 +159,7 @@ def header(details = True, live = Live(live=False, title=""), next_live="") -> r
             ),
         ),
 
-        # 3. Estadísticas
+        # 3. Estadísticas (solo si details=True)
         rx.cond(
             details,
             rx.flex(
@@ -140,7 +175,7 @@ def header(details = True, live = Live(live=False, title=""), next_live="") -> r
             )
         ),
 
-        # 4. Live Schedule
+        # 4. Live Schedule (horario desde PageState)
         rx.cond(
             details,
             rx.box(
@@ -150,7 +185,7 @@ def header(details = True, live = Live(live=False, title=""), next_live="") -> r
             ),
         ),
 
-        # 5. Texto descriptivo - COMPLETO, sin recortes
+        # 5. Texto bio descriptivo
         rx.cond(
             details,
             rx.box(

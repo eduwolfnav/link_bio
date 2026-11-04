@@ -1,3 +1,16 @@
+"""
+link_bio/components/footer.py
+------------------------------
+PROPÓSITO:
+Footer global con logo, copyright dinámico y link a GitHub.
+
+CÓMO SE CONECTA:
+- Importado por pages/index.py y pages/courses.py como cierre de página.
+- Usa styles.Size para espaciado y colors.TextColor para color de texto.
+- datetime.date.today().year mantiene el año actualizado automáticamente.
+- Imagen eduwolf_logo.png debe estar en assets/.
+"""
+
 import reflex as rx
 import datetime
 from link_bio.styles.styles import Size as Size
@@ -5,6 +18,7 @@ from link_bio.styles.colors import Color as Color
 from link_bio.styles.colors import TextColor as TextColor
 
 def footer() -> rx.Component:
+    """Footer con logo, año actual y enlace al repo. Usado al final de cada página."""
     return rx.vstack(
         rx.image(
             src="eduwolf_logo.png",
@@ -33,10 +47,10 @@ def footer() -> rx.Component:
             rx.text(
                 "By Edu Wolf 🐺",
                 font_size=Size.MEDIUM.value,
-                white_space="nowrap"  # <-- Evita que el texto salte de línea
+                white_space="nowrap"
             ),
             align="center",
-            spacing="3",  # Espacio entre el icono y el texto
+            spacing="3",
         ),
         width="100%",
         justify="center",

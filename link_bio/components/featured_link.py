@@ -1,8 +1,32 @@
+"""
+link_bio/components/featured_link.py
+------------------------------------
+PROPÓSITO:
+Renderiza la sección de links destacados (grid de tarjetas con imagen y título).
+
+CÓMO SE CONECTA:
+- Recibe featured_items (lista reactiva) desde views/index_links.py o state/PageState.py.
+- Usa components/title.py para el título "Destacados".
+- Usa styles.button_body_style para el texto de cada tarjeta.
+- Cada item esperado es dict con keys image, title, url (modelo Featured.py).
+- Se muestra solo si hay items (rx.cond length > 0).
+"""
+
 import reflex as rx
 import link_bio.styles.styles as styles
 from link_bio.components.title import title
 
 def featured_link(featured_items) -> rx.Component:
+    """
+    Grid de destacados. Mapea cada item a una tarjeta con imagen y título.
+
+    Args:
+        featured_items: Var reactiva (lista de dicts con image, title, url)
+
+    Conexión:
+        - Llamado desde views/index_links.py cuando Supabase devuelve cursos/destacados.
+        - Usa rx.foreach para iterar y rx.cond para ocultar si está vacío.
+    """
     return rx.cond(
         featured_items.length() > 0,
         rx.vstack(
@@ -20,7 +44,7 @@ def featured_link(featured_items) -> rx.Component:
                                     object_fit="contain",
                                 ),
                                 width="100%",
-                                flex="1", # <- esto hace que ambas cajas midan lo mismo
+                                flex="1",
                                 display="flex",
                                 align_items="center",
                                 justify_content="center",
@@ -45,7 +69,7 @@ def featured_link(featured_items) -> rx.Component:
                         height="100%",
                         display="flex",
                         flex_direction="column",
-                        padding="12px", # un poco menos de padding para que sea compacto
+                        padding="12px",
                         border_radius="12px",
                         border="1px solid",
                         border_color="#1e293b",
@@ -60,7 +84,7 @@ def featured_link(featured_items) -> rx.Component:
                 },
                 gap="24px",
                 width="100%",
-                align_items="stretch", # <- fuerza a que la fila tenga la altura de la imagen más alta
+                align_items="stretch",
             ),
             width="100%",
             spacing="4",

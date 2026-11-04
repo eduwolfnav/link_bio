@@ -1,12 +1,26 @@
+"""
+link_bio/components/live_schedule.py
+-------------------------------------
+PROPÓSITO:
+Muestra el horario de directos (Live Schedule) con días y horas.
+
+CÓMO SE CONECTA:
+- Recibe schedule dict desde state/PageState.py o api/api.py (formato {"0": "18:00", ...}).
+- Usa _dia_nombre() para traducir key Var (0-6) a nombre de día con rx.cond (necesario porque key es Var reactiva, no string Python).
+- Es usado por views/header.py o index para mostrar cuándo es el próximo directo.
+- Usa Color.PURPLE para borde y Color.BORDER para separadores.
+"""
+
 import reflex as rx
 from link_bio.styles.styles import Size as Size
 from link_bio.styles.colors import Color as Color
 from link_bio.styles.colors import TextColor as TextColor
 
-print(">>> CARGANDO components/live_schedule.py V4 FIX VAR")
-
 def _dia_nombre(key):
-    # Mapeo con rx.cond anidado porque key es Var, no string de Python
+    """
+    Traduce key de día (Var reactiva "0"-"6") a nombre en español.
+    Usa rx.cond anidado porque no se puede hacer dict lookup con Var en Reflex.
+    """
     return rx.cond(
         key == "0", "Lunes",
         rx.cond(
@@ -21,7 +35,7 @@ def _dia_nombre(key):
                             key == "5", "Sábado",
                             rx.cond(
                                 key == "6", "Domingo",
-                                key  # fallback: muestra el key original
+                                key
                             )
                         )
                     )
@@ -31,6 +45,16 @@ def _dia_nombre(key):
     )
 
 def live_schedule(schedule: dict) -> rx.Component:
+    """
+    Renderiza horario de directos.
+
+    Args:
+        schedule: dict reactivo { "0": "18:00", "2": "19:30" } donde 0=Lunes
+
+    Conexión:
+        - Datos vienen de SupabaseAPI o TwitchAPI vía PageState
+        - rx.foreach itera cada entrada y muestra día + hora con borde inferior
+    """
     return rx.vstack(
         rx.heading(
             "Live Schedule",

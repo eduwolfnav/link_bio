@@ -1,3 +1,20 @@
+"""
+link_bio/pages/courses.py
+-------------------------
+PROPÓSITO:
+Página de cursos (ruta /courses). Muestra cursos recomendados de Python.
+
+CÓMO SE CONECTA:
+- Usa @rx.page con Route.COURSES.value (/courses) definido en routes.py.
+- on_load=PageState.load_index_data para reutilizar carga de live_status y sponsors.
+- Usa views/header.py con details=False (modo compacto sin bio ni stats).
+- Usa views/courses_links.py con lista estática de cursos de YouTube.
+- Usa views/sponsors.py y components/footer.py igual que index.
+- SEO viene de utils.cursos_title/description/meta.
+
+Es independiente de featured, pero comparte lógica de live con index.
+"""
+
 import reflex as rx
 import link_bio.utils as utils
 import link_bio.constants as const
@@ -18,9 +35,10 @@ from link_bio.state.PageState import PageState
     description=utils.cursos_description,
     image=utils.preview,
     meta=utils.cursos_meta,
-    on_load=PageState.load_index_data # cámbialo a load_index_data para que también tenga is_loading
+    on_load=PageState.load_index_data
 )
 def courses() -> rx.Component:
+    """Página de cursos con header compacto y lista de cursos."""
     return rx.box(
         utils.lang(),
         navbar(),

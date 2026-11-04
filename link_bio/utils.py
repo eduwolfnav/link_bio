@@ -1,22 +1,43 @@
+"""
+link_bio/utils.py
+-----------------
+PROPÓSITO:
+Utilidades compartidas: SEO, metadatos, zona horaria y cálculo de próximo directo.
+
+CÓMO SE CONECTA:
+- lang(), index_title, index_meta, cursos_title, etc. son importados por pages/index.py y pages/courses.py
+  para configurar <head>, OpenGraph y SEO.
+- next_date() y LOCAL_TIMEZONE_SCRIPT son usados por components/live_schedule.py para mostrar
+  cuándo es el próximo directo en la zona horaria del cliente.
+- MONTHS y WEEKDAYS centralizan la traducción a español, usados solo dentro de este módulo.
+"""
+
 from datetime import datetime, timedelta
 import re
 import reflex as rx
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-# Común
+# --- Configuración de idioma y SEO base ---
+
 def lang() -> rx.components:
+    """
+    Retorna script que fuerza lang='es' en <html>.
+    Usado en el layout principal (pages/index.py).
+    """
     return rx.script("document.documentElement.lang='es'")
 
-preview="avatar.png"
+# Imagen por defecto para OpenGraph (preview en redes sociales).
+preview = "avatar.png"
 
+# Metadatos base que se comparten en todas las páginas.
 _meta = [
     {"name": "og:type", "content": "website"},
     {"name": "og:image", "content": preview}
 ]
 
-# Index
+# --- Metadatos para página INDEX ---
 index_title = "eduwolf.nav"
-index_description="Hola, mi nombre es Edu. Soy ingeniero en ejecución en informática, y me gusta escribir."
+index_description = "Hola, mi nombre es Edu. Soy ingeniero en ejecución en informática, y me gusta escribir."
 
 index_meta = [
     {"name": "og:title", "content": index_title},
@@ -24,9 +45,9 @@ index_meta = [
 ]
 index_meta.extend(_meta)
 
-# Cursos
+# --- Metadatos para página CURSOS ---
 cursos_title = "eduwolf.nav | Cursos"
-cursos_description="Este es un listado de cursos gratis de programación y desarrollo web."
+cursos_description = "Este es un listado de cursos gratis de programación y desarrollo web."
 
 cursos_meta = [
     {"name": "og:title", "content": cursos_title},
@@ -34,10 +55,12 @@ cursos_meta = [
 ]
 cursos_meta.extend(_meta)
 
-# --- PARA ZONA HORARIA DEL CLIENTE ---
+# --- Lógica de zona horaria para directos ---
+
+# Script JS que obtiene la zona horaria del cliente (ej: America/Santiago).
 LOCAL_TIMEZONE_SCRIPT = "Intl.DateTimeFormat().resolvedOptions().timeZone"
 
-# Tu zona horaria base: donde haces los directos
+# Zona horaria base donde tú haces los directos.
 BASE_TIMEZONE = "America/Santiago"
 
 WEEKDAYS = {
@@ -66,6 +89,11 @@ MONTHS = {
 }
 
 def _parse_hour(raw: str) -> tuple[int, int] | None:
+    """
+    Parsea un string tipo '18:30' o '18' a (hora, minuto).
+    Retorna None si el formato no es válido.
+    Uso interno de next_date().
+    """
     if not raw or not isinstance(raw, str):
         return None
     raw = raw.lower().strip()
@@ -79,6 +107,22 @@ def _parse_hour(raw: str) -> tuple[int, int] | None:
     return None
 
 def next_date(dates: dict, timezone: str = None) -> str:
+    """
+    Calcula el próximo directo según un diccionario de horarios.
+
+    Args:
+        dates: dict con formato { "0": "18:00", "2": "19:30" } donde la clave es weekday (0=Lunes).
+        timezone: zona horaria del cliente (ej: "Europe/Madrid"). Si es None, usa la local del servidor.
+
+    Retorna:
+        String formateado tipo "Hoy, 02 de Noviembre a las 18:30 | Zona horaria: Santiago"
+        o "" si no hay fechas válidas.
+
+    Conexión:
+        - Es llamado por components/live_schedule.py para mostrar el próximo directo.
+        - Usa BASE_TIMEZONE como referencia y convierte a la zona del cliente.
+        - Busca hasta 14 días adelante para cubrir cambios de día por zona horaria.
+    """
     if not dates or len(dates) == 0:
         return ""
     
@@ -91,9 +135,8 @@ def next_date(dates: dict, timezone: str = None) -> str:
 
     now_client = datetime.now(client_tz)
     now_base = datetime.now(base_tz)
-    current_weekday = now_client.weekday()
 
-    for index in range(14): # Buscamos en 14 días por si el cambio de zona mueve el día
+    for index in range(14):
         day_key = str((now_base.weekday() + index) % 7)
         if day_key not in dates or not dates[day_key]:
             continue
@@ -102,23 +145,23 @@ def next_date(dates: dict, timezone: str = None) -> str:
             continue
         hour, minute = parsed
 
-        # 1. Creamos el próximo directo en tu zona base (Santiago)
+        # 1. Próximo directo en tu zona base (Santiago)
         next_date_base = (now_base + timedelta(days=index)).replace(
             hour=hour, minute=minute, second=0, microsecond=0
         )
         
-        # Si es hoy pero ya pasó en tu zona base, saltamos
+        # Si es hoy pero ya pasó en tu zona base, lo saltamos
         if next_date_base < now_base and index == 0:
             continue
 
-        # 2. Convertimos esa hora a la zona del cliente
+        # 2. Convertimos a zona del cliente
         next_date_client = next_date_base.astimezone(client_tz)
 
-        # 3. Si la conversión deja la fecha en el pasado para el cliente, saltamos
+        # 3. Si sigue en el pasado para el cliente, lo saltamos
         if next_date_client < now_client:
             continue
 
-        # Formato estilo MoureDev
+        # Formato final estilo MoureDev
         if next_date_client.date() == now_client.date():
             formated_date = f"Hoy, {next_date_client.day:02d} de {MONTHS[next_date_client.month]}"
         else:

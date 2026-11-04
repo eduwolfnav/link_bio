@@ -1,3 +1,17 @@
+"""
+link_bio/components/navbar.py
+------------------------------
+PROPÓSITO:
+Navbar fija superior con logo y botón flotante.
+
+CÓMO SE CONECTA:
+- Usado en todas las páginas (pages/index.py, pages/courses.py) como cabecera fija.
+- Usa Route.INDEX para linkear logo al home.
+- Importa float_button desde ant_components.py (botón donación flotante en esquina).
+- Usa styles.navbar_title_style para tipografía del logo "edu wolf.nav".
+- Color.SECONDARY como fondo, con z_index 999 para quedar sobre el contenido.
+"""
+
 import reflex as rx
 import link_bio.styles.styles as styles
 
@@ -7,6 +21,16 @@ from link_bio.styles.colors import Color as Color
 from link_bio.routes import Route
 
 def navbar() -> rx.Component:
+    """
+    Navbar fija con logo y botón flotante.
+
+    Estructura:
+    - Box fijo top 0 con hstack: logo (edu + wolf.nav) a la izquierda, float_button a la derecha
+    - Box espaciador de 60px para evitar que el contenido quede debajo del navbar fijo
+
+    Conexión:
+    - Se renderiza al inicio de cada página en pages/
+    """
     return rx.fragment(
         rx.box(
             rx.hstack(

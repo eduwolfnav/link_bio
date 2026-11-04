@@ -1,3 +1,21 @@
+"""
+link_bio/views/index_links.py
+-----------------------------
+PROPÓSITO:
+Vista que agrupa todos los links principales de la página de inicio.
+
+CÓMO SE CONECTA:
+- Usado por pages/index.py como bloque central de links.
+- Usa components/link_button.py para cada botón.
+- Usa components/title.py para separar secciones (Asyncio, Cursos, Social...).
+- Usa components/featured_link.py para mostrar destacados desde Supabase (featured param).
+- Usa routes.Route para navegación interna (TESTASYNCIO, COURSES) sin recargar página.
+- Los links externos van a Instagram, YouTube, GitHub, email.
+
+Args:
+    featured: lista de modelo Featured (title, image, url) que viene de PageState o SupabaseAPI
+"""
+
 import reflex as rx
 from link_bio.components.link_button import link_button
 from link_bio.components.title import title
@@ -6,6 +24,17 @@ from link_bio.routes import Route
 from link_bio.model.Featured import featured
 
 def index_links(featured: list[featured]) -> rx.Component:
+    """
+    Lista de links de la página principal.
+
+    Estructura:
+    - Ejemplo Asyncio (link interno)
+    - Destacados (grid desde featured_link)
+    - Cursos recomendados (link interno a /courses)
+    - Social (Instagram, YouTube)
+    - Recursos (GitHub)
+    - Contacto (email)
+    """
     return rx.vstack(
         title("Ejemplo Asyncio"),
         link_button(
@@ -16,7 +45,7 @@ def index_links(featured: list[featured]) -> rx.Component:
             is_external=False
         ),
 
-        # Aquí antes tenías 40 líneas, ahora es 1
+        # Grid de destacados que viene de Supabase - si hay datos se muestra, si no rx.fragment()
         featured_link(featured),
         
         title("Cursos recomendados"),

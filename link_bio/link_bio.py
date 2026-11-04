@@ -1,3 +1,21 @@
+"""
+link_bio/link_bio.py
+--------------------
+PROPÓSITO:
+Entry point de la aplicación. Aquí se ensambla todo: crea el backend FastAPI,
+registra las APIs personalizadas y monta la app de Reflex con estilos y analytics.
+
+CÓMO SE CONECTA:
+- Importa styles.BASE_STYLE y STYLESHEETS desde link_bio/styles/ -> define el look global.
+- Importa const.G_TAG desde link_bio/constants.py -> inyecta Google Analytics.
+- Importa las páginas index, courses, testasyncio desde link_bio/pages/ -> son las rutas que Reflex renderiza.
+- Importa hello y live desde link_bio/api/api.py -> son endpoints que se exponen vía FastAPI.
+- FastAPI app se inyecta en Reflex vía api_transformer, permitiendo que /hola y /live/{user} convivan con la UI.
+
+FLUJO:
+FastAPI (api) + Reflex (UI) -> rx.App -> se exporta a public/ para Vercel y se ejecuta en Railway.
+"""
+
 import reflex as rx
 import link_bio.styles.styles as styles
 import link_bio.constants as const
@@ -8,18 +26,14 @@ from link_bio.pages.courses import courses
 from link_bio.pages.testasyncio import testasyncio
 from link_bio.api.api import hello, live
 
-
-
-# 1. Creamos la app de FastAPI para las APIs personalizadas
+# Backend FastAPI para exponer endpoints propios junto a la API interna de Reflex.
 fastapi_app = FastAPI()
 
-# 2. Agregamos la ruta usando FastAPI directamente
-# fastapi_app.add_api_route("/hello", hello)
+# Registro de rutas API personalizadas. Estas rutas son consumidas por componentes como live_schedule.
 fastapi_app.add_api_route("/hola", hello)
-
 fastapi_app.add_api_route("/live/{user}", live)
 
-# 3. Inicializamos Reflex inyectando la app de FastAPI
+# App principal de Reflex. Aquí se une frontend + backend + estilos + analytics.
 app = rx.App(
     style=styles.BASE_STYLE,
     stylesheets=styles.STYLESHEETS,
@@ -37,79 +51,5 @@ app = rx.App(
             """
         ),
     ],
-    api_transformer=fastapi_app # <-- Aquí conectamos las rutas de API
+    api_transformer=fastapi_app,  # Conecta FastAPI con Reflex para que /hola y /live funcionen en prod.
 )
-
-
-# app.compile()
-
-# reflex run
-# pip install --upgrade reflex # Actualiza reflex
-# pip install --upgrade pip # Actualiza el gestor de dependencias
-
-# Para cambiar version de Reflex.
-
-# C:\UTIL\Python\webPython\link_bio\requirements.txt
-# reflex==0.9.12
-# reflex==0.3.2
-
-# pip install -r ./requirements.txt
-# reflex --version
-
-
-### DESPIEGUE
-
-# reflex login
-
-# reflex deploy
-
-# reflex cloud apps list
-# reflex cloud project list
-
-# reflex export --frontend-only # crear Build de Produccion empaquetada en un .zip
-# unzip frontend.zip -d public
-# Expand-Archive -Path frontend.zip -DestinationPath public
-
-# reflex cloud apps status 7bcb5522-4ceb-4b9d-9a9f-10aced36a231 --watch
-
-# Crear fichero build.sh
-# sh build.sh
-
-# & "C:\Program Files\Git\usr\bin\sh.exe" local_build.sh
-
-# git init
-# git status
-# git add .
-
-# git commit -m "Primer commit"
-
-# git remote add origin https://github.com/eduwolfnav/link_bio.git
-# git remote -v
-# git push -u origin master # Subir cambios a GitHub
-
-
-#### CURSO WEB AVANZADO
-
-# python3 -m venv .venv #Crea entorno virtual oculto
-# .\.venv\Scripts\Activate.ps1 # Activar
-
-# pip install -r ./requirements.txt
-
-
-
-### Docker
-
-# preparar, .dockerignore y Dockerfile en la raiz
-
-# En consola CMD.
-# docker build -t eduwolfnav-web:lasted ./
-# docker run -d -p 3000:3000 -p 8000:8000 --name app eduwolfnav-web:lasted # Para exponer todo.
-# docker run -d -p 8000:8000 --name app eduwolfnav-web:lasted # Solo Backend
-
-# IA
-# docker rm -f app
-# docker build -t eduwolfnav-web:lasted .
-# docker run -d -p 8000:8000 --name app eduwolfnav-web:lasted
-# docker logs app
-
-# TEST

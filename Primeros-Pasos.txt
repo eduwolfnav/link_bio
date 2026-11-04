@@ -1,0 +1,184 @@
+# PRIMEROS PASOS - Proyecto link_bio (Reflex)
+# Autor: Edu Wolf
+# Repo: https://github.com/eduwolfnav/link_bio
+# -------------------------------------------------------------
+# Este archivo registra paso a paso, cronológico, qué instalar y qué ejecutar
+# para levantar el proyecto desde cero en un PC nuevo o en Railway/Vercel.
+# -------------------------------------------------------------
+
+=== BLOQUE 0 - REQUISITOS PREVIOS ===
+# Verificar versiones (debes tener Python 3.11+ recomendado para Reflex 0.9.12)
+python --version
+pip --version
+git --version
+node --version  # Reflex usa Node internamente
+
+=== BLOQUE 1 - CLONAR REPO Y ENTRAR ===
+git clone https://github.com/eduwolfnav/link_bio.git
+cd link_bio
+
+=== BLOQUE 2 - CREAR ENTORNO VIRTUAL (RECOMENDADO) ===
+# Windows
+python -m venv .venv
+.venv\Scripts\activate
+
+# Linux / Mac / Railway no necesita venv, pero local sí:
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Verificar que estás dentro del venv
+where python
+# o
+which python
+
+=== BLOQUE 3 - INSTALAR DEPENDENCIAS DESDE requirements.txt ===
+# Tu requirements.txt contiene:
+# reflex[db]==0.9.12, fastapi, python-dotenv, requests, supabase, configcat-client, tzdata
+
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# Si quieres instalación manual por bloques (mismo resultado):
+pip install "reflex[db]==0.9.12"
+pip install fastapi python-dotenv requests supabase configcat-client tzdata greenlet
+
+# Verificar instalación
+pip freeze
+reflex --version
+
+=== BLOQUE 4 - VARIABLES DE ENTORNO (.env) ===
+# Crear archivo .env en la raíz (al lado de rxconfig.py)
+# Este archivo NO se sube a GitHub (.gitignore)
+
+# Contenido mínimo .env:
+# SUPABASE_URL=https://tu-proyecto.supabase.co
+# SUPABASE_PUBLISHABLE_KEY=tu_publishable_key
+# TWITCH_CLIENT_ID=tu_twitch_client_id
+# TWITCH_CLIENT_SECRET=tu_twitch_client_secret
+# CONFIGCAT_SDK_KEY=tu_configcat_sdk_key
+
+# En Windows:
+copy nul .env
+# En Linux/Mac:
+touch .env
+# Luego edítalo con notepad / code / nano
+
+=== BLOQUE 5 - INICIALIZAR REFLEX (SOLO LA PRIMERA VEZ) ===
+# Si clonas repo ya trae .web y rxconfig.py, NO necesitas reflex init
+# Pero si partes desde cero:
+reflex init
+
+# Esto crea/actualiza carpeta .web y verifica dependencias Node
+
+=== BLOQUE 6 - BASE DE DATOS (Reflex DB con SQLModel) ===
+# Tu modelo Live.py necesita tabla Live
+# Reflex usa Alembic internamente
+
+# Crear migración inicial (solo una vez)
+reflex db init
+reflex db makemigrations
+
+# Aplicar migraciones
+reflex db migrate
+
+# Si cambias model/Live.py luego:
+reflex db makemigrations --message "update Live model"
+reflex db migrate
+
+=== BLOQUE 7 - LEVANTAR EN LOCAL (DESARROLLO) ===
+reflex run
+
+# O con puerto específico:
+reflex run --env dev --port 3000
+
+# Tu app queda en:
+# Frontend: http://localhost:3000
+# Backend: http://localhost:8000
+
+# Para ver logs de API:
+reflex run --loglevel debug
+
+=== BLOQUE 8 - COMANDOS REFLEX ÚTILES ===
+reflex --help
+reflex run --help
+reflex db --help
+reflex export  # Exporta frontend estático para Vercel
+reflex build   # Build para producción
+
+=== BLOQUE 9 - GITHUB - FLUJO DIARIO ===
+# Estado
+git status
+
+# Agregar cambios
+git add .
+# o por archivo
+git add link_bio/views/header.py
+
+# Commit
+git commit -m "feat: limpia comentarios y agrega docs en header"
+
+# Push a main
+git push origin main
+
+# Crear rama para feature
+git checkout -b feature/limpieza-fase-4
+git push -u origin feature/limpieza-fase-4
+
+# Pull de cambios remotos
+git pull origin main
+
+=== BLOQUE 10 - DEPLOY ===
+
+# --- VERCEL (Frontend) ---
+# 1. Conectar repo en vercel.com
+# 2. Vercel detecta reflex, comando build: reflex export
+# 3. Agregar env vars en Vercel Dashboard -> Settings -> Environment Variables
+
+# --- RAILWAY (Backend + DB) ---
+# 1. Conectar repo en railway.app
+# 2. Agregar variables en Railway -> Variables (las mismas del .env)
+# 3. Railway ejecuta automáticamente: pip install -r requirements.txt + reflex db migrate + reflex run --env prod
+# 4. IMPORTANTE: Railway es case-sensitive (Linux) - por eso conservar nombres exactos: rxconfig.py no Rxconfig.py, link_bio.py no Link-Bio.py
+
+# Comando manual de deploy check:
+reflex build
+reflex export --loglevel debug
+
+=== BLOQUE 11 - VERIFICACIÓN FINAL POST-INSTALACIÓN ===
+pip list | grep reflex
+python -c "import reflex; print(reflex.__version__)"
+python -c "import supabase, configcatclient, dotenv; print('OK deps')"
+reflex run
+
+# Si todo ok, verás:
+# - Navbar con edu wolf.nav
+# - Avatar + redes
+# - Live Schedule desde ConfigCat
+# - Featured desde Supabase (si hay datos)
+# - Botón En vivo desde Twitch (si estás live)
+
+=== BLOQUE 12 - TROUBLESHOOTING COMÚN ===
+# Error: No module named 'reflex'
+pip install -r requirements.txt
+
+# Error: SUPABASE_URL not set
+# -> Revisa .env existe y dotenv.load_dotenv() se ejecuta
+
+# Error: Twitch token invalid
+# -> Revisa TWITCH_CLIENT_ID / SECRET en https://dev.twitch.tv/console
+
+# Error: ConfigCat sin SDK Key
+# -> App usa fallback default en ConfigCatAPI.py (no rompe, usa horario local)
+
+# Error: ModuleNotFoundError: No module named 'greenlet'
+pip install greenlet
+
+# Limpiar cache Reflex
+rm -rf .web
+reflex init
+reflex run
+
+# Windows: borrar .web
+rmdir /s /q .web
+
+=== FIN ===

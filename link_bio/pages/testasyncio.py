@@ -1,3 +1,20 @@
+"""
+link_bio/pages/testasyncio.py
+-----------------------------
+PROPÓSITO:
+Página de prueba para eventos async (ruta /testasyncio). Demuestra carga async desde backend.
+
+CÓMO SE CONECTA:
+- Usa @rx.page con Route.TESTASYNCIO.value definido en routes.py.
+- Define IndexState interno con estado say_hello y loading, y evento load_hello que llama api.hello().
+- on_load=[IndexState.load_hello, PageState.check_live] ejecuta dos cargas al entrar.
+- Usa views/header.py compacto, y muestra mensaje del backend con rx.cond loading.
+- Es ejemplo didáctico de rx.State + async/await en Reflex.
+
+FLUJO:
+IndexState.load_hello -> api.hello() -> asyncio.sleep(4) -> mensaje -> UI
+"""
+
 import reflex as rx
 import link_bio.utils as utils
 import link_bio.constants as const
@@ -15,12 +32,14 @@ from link_bio.state.PageState import PageState
 import asyncio
 
 class IndexState(rx.State):
+    """Estado local de prueba para demo async. No es PageState global."""
+
     say_hello: str = ""
-    loading: bool = True  # arranca mostrando "Cargando..."
+    loading: bool = True
 
     @rx.event
     async def load_hello(self):
-        print(">>> load_hello se ejecutó")
+        """Evento async que llama backend api.hello() con manejo de error."""
         self.loading = True
         yield
         try:
@@ -39,6 +58,7 @@ class IndexState(rx.State):
         meta=utils.cursos_meta       
 )
 def testasyncio() -> rx.Component:
+    """Página de prueba async con botón para recargar mensaje del backend."""
     return rx.box(
         utils.lang(),
         navbar(),
@@ -50,9 +70,7 @@ def testasyncio() -> rx.Component:
                     next_live=PageState.next_live
                 ),
                 
-                # Contenedor para lo amarillo con espacio extra arriba y abajo
                 rx.vstack(
-                    # Centramos lo rojo usando rx.center o width="100%" con text_align
                     rx.center(
                         rx.cond(
                             IndexState.loading,
@@ -63,8 +81,8 @@ def testasyncio() -> rx.Component:
                     ),
                     rx.button("Probar evento", on_click=IndexState.load_hello),
                     width="100%",
-                    align_items="center",  # Centra los elementos horizontalmente en este bloque
-                    margin_y="2em"         # <--- Aquí le das más espacio arriba y abajo (ajusta los "em" a tu gusto)
+                    align_items="center",
+                    margin_y="2em"
                 ),
                 
                 sponsors(),
