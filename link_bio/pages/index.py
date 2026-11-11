@@ -78,5 +78,14 @@ def index() -> rx.Component:
         on_mount=rx.call_script(
             utils.LOCAL_TIMEZONE_SCRIPT,
             callback=PageState.set_timezone
-        )
+        ),
+        # Fondo estático para toda la página
+        background="linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url(/fondo.avif)",
+        background_size="cover",
+        background_position="center",
+        background_repeat="no-repeat",
+        background_attachment="fixed",
+        background_color="#000000",
+        min_height="100vh",
+        width="100%"
     )
