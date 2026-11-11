@@ -27,7 +27,7 @@ def lang() -> rx.components:
     return rx.script("document.documentElement.lang='es'")
 
 # Imagen por defecto para OpenGraph (preview en redes sociales).
-preview = "avatar.png"
+preview = "EduWolf.Nav.jpeg"
 
 # Metadatos base que se comparten en todas las páginas.
 _meta = [

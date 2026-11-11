@@ -61,7 +61,7 @@ def header(details=True, live=Live(live=False, title=""), next_live="") -> rx.Co
                     name="Edu Wolf",
                     fallback="EW",
                     size="8",
-                    src="avatar.png",
+                    src="EduWolf.Nav.jpeg",
                     padding="0px",
                     border="4px solid",
                     border_color=Color.CONTENT.value,
